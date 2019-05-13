@@ -46,13 +46,15 @@
                             },{
                                 index: '/serviceList',
                                 title: '平台服务'
-                            },{
-                                index: '/purchaseList',
-                                title: '品项管理'
-                            },{
-                                index: '/fictitiousList',
-                                title: '虚拟卡券管理'
-                            }
+                            },
+                            // 2019.05.13 去掉品相管理、虚拟卡券管理
+                            // {
+                            //     index: '/purchaseList',
+                            //     title: '品项管理'
+                            // },{
+                            //     index: '/fictitiousList',
+                            //     title: '虚拟卡券管理'
+                            // }
                         ]
                     },
                     {
