@@ -5,8 +5,7 @@
                 <bread-crumb :bread-crumb="breadcrumb"></bread-crumb>
             </div>
             <div class="page-header-actions">
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="$router.push({ path: '/audit/business' })">加盟商审核</el-button>
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="$router.push({ path: '/business/alliance_add' })">添加加盟商</el-button>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="$router.push({ path: '/audit/business' })">企业审核</el-button>
             </div>
         </div>
         <div class="page-content">
@@ -23,7 +22,7 @@
                 <table-search :searchs="searchs"></table-search>
             </nomal-table>
             <el-dialog :title="is_use==0?'停用':'启用'" :visible.sync="dialog" width="30%">
-                <p style="color:red">此操作会{{is_use==0?'停用':'启用'}}加盟商名下所有门店</p>
+                <p style="color:red">此操作会{{is_use==0?'停用':'启用'}}企业名下所有门店</p>
                 <p>操作人:{{user.data.user_realname}}</p>
                 <p>操作备注:</p>
                 <p>
@@ -49,10 +48,10 @@ export default {
             breadcrumb: [
                 //面包屑
                 {
-                    name: "加盟商管理"
+                    name: "企业管理"
                 },
                 {
-                    name: "加盟商列表",
+                    name: "企业列表",
                     url: "/business/alliance"
                 }
             ],
@@ -63,10 +62,10 @@ export default {
             remark: '无',
             status_filter: "",
             tagsListGroup: {
-                '选择类型:': [
+                '选择身份:': [
                     { title: '全部', key: 'business_type', value: '' },
-                    { title: '加盟', key: 'business_type', value: 1 },
-                    { title: '非加盟', key: 'business_type', value: 2 }
+                    { title: '企业', key: 'business_type', value: 1 },
+                    { title: '网红达人', key: 'business_type', value: 2 }
                 ],
 
                 '选择状态:': [
@@ -78,17 +77,24 @@ export default {
             searchs: {
                 "list": [{
                         "type": "input-text", //输入文本
-                        "label": "加盟商名称",
+                        "label": "企业名称",
                         "name": "business_name",
                         "value": "",
-                        "placeholder": "加盟商名称",
+                        "placeholder": "请输入",
                     },
                     {
                         "type": "input-text", //输入文本
-                        "label": "店长",
-                        "name": "city",
+                        "label": "法人姓名",
+                        "name": "business_reg_name",
                         "value": "",
-                        "placeholder": "",
+                        "placeholder": "请输入",
+                    },
+                    {
+                        "type": "input-text", //输入文本
+                        "label": "手机号码",
+                        "name": "business_phone",
+                        "value": "",
+                        "placeholder": "请输入",
                     },
                    
                     {
@@ -112,16 +118,27 @@ export default {
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "加盟日期",
-                        "prop": "business_ctime",
+                        "label": "创建时间",
+                        "prop": "create_time",
                         "width": ""
                     },
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "公司名称",
+                        "label": "企业名称",
                         "prop": "business_name",
                         "width": "",
+
+                    },
+                    {
+                        "type": "text",
+                        "align": "center",
+                        "label": "身份",
+                        "prop": "business_type",
+                        "width": "50px",
+                        formatter(row) {
+                            return row.business_type == 1 ? '企业' : '网红'
+                        }
 
                     },
                     {
@@ -138,42 +155,61 @@ export default {
                         }
 
                     },
-
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "类型",
+                        "label": "推荐人",
+                        "prop": "business_name",
                         "width": "",
-                        formatter(row) {
-                            return row.business_type == 1 ? '加盟' : '非加盟'
-                        }
 
                     },
-                    {
-                        "type": "text",
-                        "align": "center",
-                        "label": "公司地址",
-                        "prop": "business_company_adress",
-                        "width": "200",
 
-                    },
-                    {
-                        "type": "text",
-                        "align": "center",
-                        "label": "推荐人平台账号",
-                        "prop": "p_name",
+                    // {
+                    //     "type": "text",
+                    //     "align": "center",
+                    //     "label": "类型",
+                    //     "width": "",
+                    //     formatter(row) {
+                    //         return row.business_type == 1 ? '加盟' : '非加盟'
+                    //     }
 
-                    },
+                    // },
+                    // {
+                    //     "type": "text",
+                    //     "align": "center",
+                    //     "label": "公司地址",
+                    //     "prop": "business_company_adress",
+                    //     "width": "200",
+
+                    // },
+                    // {
+                    //     "type": "text",
+                    //     "align": "center",
+                    //     "label": "推荐人平台账号",
+                    //     "prop": "p_name",
+
+                    // },
                     {
                         "type": "text",
                         "align": "center",
                         "label": "状态",
-                        "width": "",
+                        "width": "50px",
                         formatter(row) {
                             return `<div style="color:red">
                                 ${row.business_is_use==0?'停用':'启用'}
                                 </div>`
                         }
+                    },
+                    {
+                        "type": "text",
+                        "align": "center",
+                        "label": "认证状态",
+                        "prop": "business_auth_status",
+                        "width":"80px",
+                        formatter(row) {
+                            return ['未认证','认证中','已认证','认证失败','','平台企业'][row.business_auth_status]
+                        }
+
                     },
                     {
                         "type": "switch_btn",
@@ -186,26 +222,45 @@ export default {
 
                     {
                         "type": "handle",
-                        "label": "查看",
+                        "label": "操作",
                         "align": "center",
-                        "width": "",
+                        "width": "200px",
                         "list": [
                             {
-                                "label": "修改",
+                                "label": "编辑",
                                 "type": "edit",
                                 onClick(tablePage, self, row) {
-                                    console.log(row,'row')
                                     self.$router.push("/business/alliance_add/" + row.business_id)
+
+                                    // if(row.business_auth_status!=0){
+                                    //     self.$router.push("/business/alliance_add/" + row.business_id)
+                                    // }else{
+                                    //     self.$router.push("/business/alliance_add")
+                                    // }
+                                    
                                 }
                             },
                             {
                             "label": "详情",
                             "type": "detail",
-                            onClick(tablePage, self, row) {
-                                self.$router.push("/business/alliance_detail/" + row.business_id)
-                            }
+                                onClick(tablePage, self, row) {
+                                    self.$router.push("/business/alliance_detail/" + row.business_id)
+                                }
 
-                        }]
+                            },
+                            {
+                                "label": "去认证",
+                                "type": "edit",
+                                onClick(tablePage, self, row) {
+                                    self.$router.push("/business/alliance_add/" + row.business_id)
+                                    // if(row.business_auth_status!=0){
+                                    //     self.$router.push("/business/alliance_add/" + row.business_id)
+                                    // }else{
+                                    //     self.$router.push("/business/alliance_add")
+                                    // }
+                                }
+                            },
+                        ]
                     }
 
 

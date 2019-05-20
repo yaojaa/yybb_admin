@@ -35,7 +35,7 @@
                         </div>
                         <div class="fn-col" @click="allianceClick" style="background:#FC507A url('/static/img/copy3.png') no-repeat right bottom">
                             <img src="/static/img/fn_icon3.png" width="52">
-                            <span>{{'加盟商管理'}}</span>
+                            <span>{{'企业管理'}}</span>
                         </div>
                         <!--  <div class="fn-col" style="background:#9164F6 url('/static/img/copy4.png') no-repeat right bottom">
                     <img src="/static/img/fn_icon4.png" width="52">

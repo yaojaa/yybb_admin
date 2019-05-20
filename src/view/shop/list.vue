@@ -50,7 +50,7 @@ export default {
             breadcrumb: [
                 //面包屑
                 {
-                    name: "加盟商管理"
+                    name: "企业管理"
                 },
                 {
                     name: "门店列表",
@@ -65,11 +65,6 @@ export default {
             	currentItem: {},
             status_filter: "",
             tagsListGroup: {
-                '选择类型:': [
-                    { title: '全部', key: 'business_type', value: '' },
-                    { title: '母店', key: 'shop_type', value: 0 },
-                    { title: '子店', key: 'business_type', value: 1 }
-                ],
 
                 '选择状态:': [
                     { title: '全部', key: 'shop_is_use', value: '' },
@@ -81,25 +76,12 @@ export default {
                 "list": [
                     {
                         "type": "input-text", //输入文本
-                        "label": "公司名称",
+                        "label": "门店名称",
                         "name": "shop_name",
                         "value": "",
-                        "placeholder": "公司名称",
+                        "placeholder": "门店名称",
                     },
-                    {
-                        "type": "input-text", //输入文本
-                        "label": "加盟商名称",
-                        "name": "business_name",
-                        "value": "",
-                        "placeholder": "加盟商名称",
-                    },
-                    {
-                        "type": "input-text", //输入文本
-                        "label": "法人姓名",
-                        "name": "shop_corporation",
-                        "value": "",
-                        "placeholder": "",
-                    },
+                    
                     {
                         "type": "input-text", //选择器
                         "label": "城市",
@@ -127,14 +109,14 @@ export default {
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "添加时间",
-                        "prop": "shop_ctime",
+                        "label": "创建时间",
+                        "prop": "create_time",
                         "width": ""
                     },
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "公司名称",
+                        "label": "门店名称",
                         "prop": "shop_name",
                         "width": "",
 
@@ -142,41 +124,35 @@ export default {
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "法人姓名/手机号",
-                        "prop": "shop_corporation",
+                        "label": "归属企业",
+                        "prop": "business_name",
+                        "width": "",
+
+                    },
+                    {
+                        "type": "text",
+                        "align": "center",
+                        "label": "店长姓名/手机号",
+                        "prop": "shop_account_leader_name",
                         "width": "200",
                         formatter(row) {
                             return `<p style='text-align: center'>
-                                ${row.shop_corporation}<br/>
-                                ${row.shop_phone}
+                                ${row.shop_account_leader_name}<br/>
+                                ${row.shop_account_leader_phone}
                                                     </p>`;
                         }
 
                     },
+                    
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "类型",
-                        "width": "",
-                        formatter(row) {
-                            return row.shop_type == 1 ? '子店' : '母店'
-                        }
-                    },
-                    {
-                        "type": "text",
-                        "align": "center",
-                        "label": "公司地址",
+                        "label": "门店地址",
                         "prop": "shop_address",
                         "width": "200",
 
                     },
-                    {
-                        "type": "text",
-                        "align": "center",
-                        "label": "归属加盟商",
-                        "prop": "business_name",
-
-                    },
+                    
                     {
                         "type": "text",
                         "align": "center",
@@ -282,14 +258,14 @@ export default {
 
                 if (res.data.code == 0) {
 
-                    this.$alert('操作成功' + res.data.data)
+                    this.$alert( res.data.data)
 
                     this.$refs.table.getData({
                         is_page: 1,
                         page: 1
                     });
                 } else {
-                    this.$alert('操作失败' + res.data.msg)
+                    this.$alert(res.data.msg)
 
                 }
 

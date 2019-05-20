@@ -9,7 +9,7 @@
 					<el-col :span="8">
 						<div class="grid-content bg-purple user-info-item user-pic">
 							<div class="head-pic center">
-								<img :src="info.user_info_head_img" alt="" class="user-head-pic">
+								<img :src="info.user_head_img" alt="" class="user-head-pic">
 							</div>
 							<p class="user-name center">{{info.user_info_nick_name}}</p>
 							<p class="left">账号：{{info.user_bind_phone || '--'}}</p>
@@ -20,11 +20,11 @@
 					<el-col :span="16">
 						<div class="grid-content bg-purple user-info-item user-basic-info">
 							<h4>基本信息</h4>
-							<p><span class="span-label">性别：</span>{{User_sex[info.user_info_gender] || '--'}}</p>
-							<p><span class="span-label">生日：</span>{{info.user_info_birthday || '--'}}</p>
-							<p><span class="span-label">联系电话：</span>{{info.user_bind_phone || '--'}}</p>
-							<p><span class="span-label">现住址：</span>{{info.user_info_home_detail || '--'}}</p>
-							<p><span class="span-label">个人爱好：</span>{{info.my_fav || '--'}}</p>
+							<p><span class="span-label">性别：</span>{{User_sex[info.user_gender] || '--'}}</p>
+							<p><span class="span-label">生日：</span>{{info.user_birthday || '--'}}</p>
+							<p><span class="span-label">联系电话：</span>{{info.user_bind_mobile || '--'}}</p>
+							<p><span class="span-label">现住址：</span>{{info.home_addr_detail || '--'}}</p>
+							<p><span class="span-label">个人爱好：</span>{{info.fav || '--'}}</p>
 							<p><span class="span-label">注册时间：</span>{{info.user_info_ctime}}</p>
 							<p><span class="span-label">注册渠道：</span>{{User_from[info.user_from] || '--'}}</p>
 							<p><span class="span-label">归属门店：</span>{{info.my_superior || '--'}}</p>
@@ -35,12 +35,14 @@
 	
 			<div class="black-list">
 				<h4>拉黑记录</h4>
-				<el-table :data="blackList" style="margin-top: 10px;width: 100%" :show-header="false">
-					<el-table-column prop="black_ctime" label="拉黑日期" width="150">
+				
+				<el-table :data="blackList" style="margin-top: 10px;width: 100%" :show-header="true">
+
+					<el-table-column prop="black_ctime" label="拉黑日期" width="180">
 					</el-table-column>
-					<el-table-column prop="black_mark" label="姓名">
+					<el-table-column prop="admin_name" label="姓名">
 					</el-table-column>
-					<el-table-column prop="admin_user" label="地址" width="80">
+					<el-table-column prop="black_reason" label="原因" width="280">
 					</el-table-column>
 				</el-table>
 			</div>

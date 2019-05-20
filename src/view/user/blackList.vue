@@ -1,14 +1,21 @@
 <template>
     <div class="page">
         <div class="page-header">
-           <bread-crumb :bread-crumb="breadcrumb"></bread-crumb>
+            <div class="crumbs">
+                 <bread-crumb :bread-crumb="breadcrumb"></bread-crumb>
+            </div>
+            <div class="page-header-actions">
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="$router.push({ path: '/audit/shop' })">门店审核</el-button>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="$router.push({ path: '/shop/add' })">添加门店</el-button>
+            </div>
+            
         </div>
         <div class="page-content">
             <div class="filter-tag-box">
                 <div class="filter-tag-item" v-for="(item,key,index) in tagsListGroup" :key="index">
                     <div class="tag-hd">{{key}}</div>
                     <div class="tag-bd">
-                        <router-link class="tag" :class="tag.key+tag.value == status_filter?'active':''" v-for="(tag,i) in item" :key="tag.value" :to="{ path: '/audit/shop', query: {[tag.key]: tag.value }}">
+                        <router-link class="tag" :class="tag.key+tag.value == status_filter?'active':''" v-for="(tag,i) in item" :key="tag.value" :to="{ path: '/shop/list', query: {[tag.key]: tag.value }}">
                             {{tag.title}}</router-link>
                     </div>
                 </div>
@@ -25,9 +32,9 @@
                     </el-input>
                 </p>
                 <span slot="footer" class="dialog-footer">
-                                      <el-button @click="dialog = false">取 消</el-button>
-                                      <el-button type="primary" @click="doUpdateIsUse">确 定</el-button>
-                                  </span>
+                    <el-button @click="dialog = false">取 消</el-button>
+                    <el-button type="primary" @click="doUpdateIsUse">确 定</el-button>
+                </span>
             </el-dialog>
         </div>
     </div>
@@ -43,11 +50,11 @@ export default {
             breadcrumb: [
                 //面包屑
                 {
-                    name: "审核管理"
+                    name: "用户管理"
                 },
                 {
-                    name: "门店列表",
-                    url: "/audit/shop"
+                    name: "黑名单列表",
+                    url: "/user/blackList"
                 }
             ],
             user: JSON.parse(localStorage.user),
@@ -55,13 +62,9 @@ export default {
             business_id: '',
             is_use: '',
             remark: '无',
+            	currentItem: {},
             status_filter: "",
             tagsListGroup: {
-                '选择类型:': [
-                    { title: '全部', key: 'business_type', value: '' },
-                    { title: '加盟', key: 'business_type', value: 1 },
-                    { title: '非加盟', key: 'business_type', value: 2 }
-                ],
 
                 '选择状态:': [
                     { title: '全部', key: 'shop_is_use', value: '' },
@@ -70,21 +73,21 @@ export default {
                 ]
             },
             searchs: {
-                "list": [{
-                        "type": "input-text", //输入文本
-                        "label": "企业名称",
-                        "name": "business_name",
-                        "value": "",
-                        "placeholder": "企业名称",
-                    },
+                "list": [
                     {
                         "type": "input-text", //输入文本
-                        "label": "店长",
-                        "name": "city",
+                        "label": "门店名称",
+                        "name": "shop_name",
                         "value": "",
-                        "placeholder": "",
+                        "placeholder": "门店名称",
                     },
                     
+                    {
+                        "type": "input-text", //选择器
+                        "label": "城市",
+                        "name": "city_name",
+                        "value": ""
+                    },
                     {
                         "type": "input-singal-date", //输入日期
                         "label": "开始时间",
@@ -99,7 +102,7 @@ export default {
                     },
                 ]
             },
-            url: "/api/admin/shop/reviewList",
+            url: "/api/admin/shop/index",
 
             tableJson: {
                 "column": [ //行
@@ -121,26 +124,35 @@ export default {
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "店长",
-                        "prop": "shop_corporation",
-                        "width": "200"
+                        "label": "归属企业",
+                        "prop": "business_name",
+                        "width": "",
 
                     },
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "城市",
+                        "label": "店长姓名/手机号",
+                        "prop": "shop_account_leader_name",
+                        "width": "200",
+                        formatter(row) {
+                            return `<p style='text-align: center'>
+                                ${row.shop_account_leader_name}<br/>
+                                ${row.shop_account_leader_phone}
+                                                    </p>`;
+                        }
+
+                    },
+                    
+                    {
+                        "type": "text",
+                        "align": "center",
+                        "label": "门店地址",
                         "prop": "shop_address",
                         "width": "200",
 
                     },
-                    {
-                        "type": "text",
-                        "align": "center",
-                        "label": "归属企业",
-                        "prop": "business_name",
-
-                    },
+                    
                     {
                         "type": "text",
                         "align": "center",
@@ -148,23 +160,42 @@ export default {
                         "width": "",
                         formatter(row) {
                             return `<div style="color:red">
-                                ${row.review_status==1?'审核中':''}
-                                ${row.review_status==2?'审核通过':''}
-                                ${row.review_status==3?'审核不通过':''}
+                                ${row.shop_is_use==0?'停用':'启用'}
                                 </div>`
                         }
 
                     },
                     {
+                        "type": "switch_btn",
+                        "label": "操作",
+                        "align": "center",
+                        "width": "50",
+                        "prop": "shop_is_use",
+                        "value": ['停用', '启用']
+                    },
+                    
+
+                    {
                         "type": "handle",
                         "label": "查看",
                         "align": "center",
-                        "width": "50",
-                        "list": [{
+                        "width": "150",
+                        "list": [
+                            {
+                                "label": "修改",
+                                "type": "edit",
+                                onClick(tablePage, self, row) {
+                                    console.log(row,'row')
+                                    self.$router.push("/shop/add/" + row.shop_id)
+                                }
+
+
+                            },
+                            {
                             "label": "详情",
                             "type": "detail",
                             onClick(tablePage, self, row) {
-                                self.$router.push("/audit/shop/" + row._id)
+                                self.$router.push("/shop/detail/" + row.shop_id)
                             }
 
                         }]
@@ -173,6 +204,9 @@ export default {
 
                 ],
             }
+
+
+
         }
     },
     components: {
@@ -188,11 +222,13 @@ export default {
         // console.log(this.status_filter);
         this.$refs.table.getData(to.query);
         next();
-	},
+		},
     created() {
 
     },
-    computed: {},
+    computed: {
+
+    },
     methods: {
         //调用子组件的gatData方法
         //
@@ -200,39 +236,36 @@ export default {
 
 
 
-            const { business_id, shop_is_use } = data.value
-            console.log(shop_is_use)
+            const { shop_id, shop_is_use } = data.value
+            console.log(data.value,'data.value')
 
-            this.business_id = business_id
+            this.shop_id = shop_id
             this.is_use = shop_is_use == 1 ? 0 : 1
             console.log(this.is_use)
 
             this.dialog = true
         },
         doUpdateIsUse() {
-
             const params = {
-                id: this.business_id,
+                id: this.shop_id,
                 is_use: this.is_use,
                 remark: this.remark
             }
 
-
             this.$axios.post("/api/admin/shop/isUse", params).then(res => {
                 this.dialog = false;
-
                 console.log(res)
 
                 if (res.data.code == 0) {
 
-                    this.$alert('操作成功' + res.data.data)
+                    this.$alert( res.data.data)
 
                     this.$refs.table.getData({
                         is_page: 1,
                         page: 1
                     });
                 } else {
-                    this.$alert('操作失败' + res.data.msg)
+                    this.$alert(res.data.msg)
 
                 }
 

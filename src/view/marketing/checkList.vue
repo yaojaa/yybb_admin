@@ -64,10 +64,10 @@ export default {
             searchs: {
                 "list": [{
                         "type": "input-text", //输入文本
-                        "label": "加盟商名称",
+                        "label": "企业名称",
                         "name": "business_name",
                         "value": "",
-                        "placeholder": "加盟商名称",
+                        "placeholder": "企业名称",
                     },
                     {
                         "type": "input-text", //输入文本
@@ -147,7 +147,7 @@ export default {
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "归属加盟商",
+                        "label": "归属企业",
                         "prop": "business_name",
 
                     },

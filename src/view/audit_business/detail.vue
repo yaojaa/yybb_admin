@@ -80,7 +80,7 @@
                                     <div class="bd">{{info.business_name}}</div>
                                 </div>
                                     <div class="item">
-                                    <div class="hd">加盟商类型：</div>
+                                    <div class="hd">企业类型：</div>
                                     <div class="bd">{{info.business_type===1?'加盟':'非加盟'}}</div>
                                 </div>
                                 <!-- <div class="item">
@@ -210,11 +210,11 @@ export default {
                     name: "审核管理"
                 },
                 {
-                    name: "加盟商列表",
+                    name: "企业列表",
                     url: "/audit/business"
                 },
                 {
-                    name: "加盟商详情",
+                    name: "企业详情",
                     url: "/audit/business/detail"
                 }
             ],

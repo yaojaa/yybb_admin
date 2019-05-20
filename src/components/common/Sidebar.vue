@@ -104,11 +104,11 @@
                     {
                         icon: 'iconfont icon-guanggaoguanli',
                         index: 'index61',
-                        title: '加盟商管理',
+                        title: '企业管理',
                         subs: [
                             {
                                 index: '/business/alliance',
-                                title: '加盟商'
+                                title: '企业'
                             },
                             {
                                 index: '/shop/list',
@@ -128,7 +128,7 @@
                         subs: [
                             {
                                 index: '/audit/business',
-                                title: '加盟商'
+                                title: '企业'
                             },
                             {
                                 index: '/audit/shop',
@@ -164,6 +164,10 @@
                             {
                                 index: '/user/userList?is_black=0',
                                 title: '用户管理'
+                            },
+                            {
+                                index: '/user/blackList',
+                                title: '黑名单'
                             },
                             {
                                 index: '/user/beautifulList',

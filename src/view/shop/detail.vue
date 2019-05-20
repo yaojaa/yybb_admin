@@ -2,7 +2,7 @@
     <div class="page">
         <div class="page-header">
             <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item>加盟商</el-breadcrumb-item>
+                <el-breadcrumb-item>企业</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ path: $route.path }">{{$route.meta.title}}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -92,7 +92,7 @@
                                 </div>
 
                                 <div class="item">
-                                    <div class="hd">归属加盟商：</div>
+                                    <div class="hd">归属企业：</div>
                                     <div class="bd">{{info.business_name}}</div>
                                 </div>
 
