@@ -198,6 +198,43 @@ export default new Router({
                     }
                 },
                 {
+                    // 投诉企业列表
+                    path: '/manage/complaintEnterpriseList/list',
+                    component: resolve => require(['../view/complaintEnterpriseList/list.vue'], resolve),
+                    meta: {
+                        title: '投诉企业',
+                        permission: true
+                    }
+                },
+                {
+                    // 投诉企业详情
+                    path: '/manage/complaintEnterpriseList/detail/:id',
+                    component: resolve => require(['../view/complaintEnterpriseList/detail.vue'], resolve),
+                    meta: {
+                        title: '投诉企业',
+                        permission: true
+                    }
+                },
+                {
+                    // 用户投诉列表
+                    path: '/manage/userComplaint/list',
+                    component: resolve => require(['../view/userComplaint/list.vue'], resolve),
+                    meta: {
+                        title: '用户投诉',
+                        permission: true
+                    }
+                },
+                {
+                    // 用户投诉详情
+                    path: '/manage/userComplaint/detail/:id',
+                    component: resolve => require(['../view/userComplaint/detail.vue'], resolve),
+                    meta: {
+                        title: '用户投诉',
+                        permission: true
+                    }
+                },
+                
+                {
                     // 案例添加
                     path: '/manage/case/add',
                     component: resolve => require(['../view/case/case_add.vue'], resolve),

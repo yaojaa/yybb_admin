@@ -96,6 +96,14 @@
                             {
                                 index: '/manage/label',
                                 title: '标签管理'
+                            },
+                            {
+                                index: '/manage/complaintEnterpriseList/list',
+                                title: '投诉企业'
+                            },
+                            {
+                                index: '/manage/userComplaint/list',
+                                title: '用户投诉'
                             }
                         ]
                     },
@@ -165,10 +173,10 @@
                                 index: '/user/userList?is_black=0',
                                 title: '用户管理'
                             },
-                            {
-                                index: '/user/blackList',
-                                title: '黑名单'
-                            },
+                            // {
+                            //     index: '/user/blackList',
+                            //     title: '黑名单'
+                            // },
                             {
                                 index: '/user/beautifulList',
                                 title: '美丽档案'

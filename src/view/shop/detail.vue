@@ -44,11 +44,8 @@
                     prop="shop_service_phone"
                     label="手机号">
                   </el-table-column>
-
-
                 </el-table>
                 </div> 
-
             </div>
            
             <div class="page-column"  v-if="tab=='info'">
