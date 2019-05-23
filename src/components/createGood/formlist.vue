@@ -3,6 +3,17 @@
         <!-- 表单list -->
         <el-form ref="createdData" :model="createdData" :rules="rules" label-width="120px" class="form-width-small">
             <template v-if="currentActive === 0">
+                <el-form-item label="为企业选择：" prop="business_id" v-if="goodType === GOODTYPE['serviceList']">
+                    <el-select v-model="createdData.business_id" filterable placeholder="请选择">
+                        <el-option
+                            v-for="item in businessList"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                        >
+                        </el-option>
+                    </el-select>                                                   
+                </el-form-item>
                 <el-form-item label="名称：" prop="good_name">
                     <el-input  v-model="createdData.good_name" placeholder="名称为2-30个字" />                                                    
                 </el-form-item>
@@ -745,6 +756,7 @@ export default {
             trigger: "blur"
         }],
     }
+    this.getBusinessList();
     this.getCategoryList();
     this.getQuickBuyColumnList();
     this.renderLabel()
@@ -819,6 +831,20 @@ export default {
 
           //渲染分类
       },
+      getBusinessList() {
+        //获取企业列表
+        this.$axios
+            .get("/api/admin/select/businessList?city_code=110100")
+            .then(res => {
+            if (res.data.code == 0) {
+                const list = res.data.data;
+                this.businessList = list.forEach(item => {
+                    return { value: item.business_id, label: item.business_name };
+                });
+                //console.log(this.industryForm,'industryForm')
+            }
+            });
+        },
       getCategoryList(){
           //获取行业列表
         this.$axios.get("/api/admin/select/categoryList").then(res =>{
