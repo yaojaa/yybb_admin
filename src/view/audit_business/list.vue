@@ -17,7 +17,7 @@
                 <table-search :searchs="searchs"></table-search>
             </nomal-table>
             <el-dialog :title="is_use==0?'停用':'启用'" :visible.sync="dialog" width="30%">
-                <p style="color:red">此操作会{{is_use==0?'停用':'启用'}}加盟商名下所有门店</p>
+                <p style="color:red">此操作会{{is_use==0?'停用':'启用'}}企业名下所有门店</p>
                 <p>操作人:{{user.data.user_realname}}</p>
                 <p>操作备注:</p>
                 <p>
@@ -46,7 +46,7 @@ export default {
                     name: "审核管理"
                 },
                 {
-                    name: "加盟商列表",
+                    name: "企业列表",
                     url: "/audit/business"
                 }
             ],
@@ -72,10 +72,10 @@ export default {
             searchs: {
                 "list": [{
                         "type": "input-text", //输入文本
-                        "label": "加盟商名称",
+                        "label": "企业名称",
                         "name": "business_name",
                         "value": "",
-                        "placeholder": "加盟商名称",
+                        "placeholder": "企业名称",
                     },
                     {
                         "type": "input-text", //输入文本
@@ -113,7 +113,7 @@ export default {
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "加盟商门店",
+                        "label": "企业门店",
                         "prop": "business_name",
                         "width": "",
 

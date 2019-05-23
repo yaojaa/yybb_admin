@@ -134,4 +134,9 @@ export default {
   .info-right-img{
       margin-top: 20px;
   }
+   .info-right-reply{
+       background-color: #f2f2f2;
+       padding:10px;
+       margin-top: 20px;
+   }
 </style>

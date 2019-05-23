@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="page-content">
-            <div class="panel">
+            <div class="panel" id="train_panel">
                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm1" label-width="140px" class="demo-ruleForm">
 
                     <el-form-item label="培训标题:" prop="train_title">
@@ -22,6 +22,28 @@
                             <el-radio :label="5">服务话术培训</el-radio>
                             <el-radio :label="6">偷偷美微掌柜</el-radio>
                         </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="培训开始时间:" prop="train_start_time">
+                        <el-date-picker
+                            v-model="ruleForm.train_start_time"
+                            align="right"
+                            type="date"
+                            placeholder="选择日期"
+                            value-format="yyyy-MM-dd"
+                            :picker-options="pickerOptions">
+                        </el-date-picker>
+                        
+                    </el-form-item>
+                     <el-form-item label="培训结束时间:" prop="train_end_time">
+                         <el-date-picker
+                            v-model="ruleForm.train_end_time"
+                            align="right"
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            placeholder="选择日期"
+                            :picker-options="pickerOptions">
+                        </el-date-picker>
+                       
                     </el-form-item>
                     <el-form-item label="培训地址:" prop="train_address">
                         <el-input v-model="ruleForm.train_address"></el-input>
@@ -50,7 +72,7 @@
                     
                     </el-form-item>
 
-                    <el-form-item label="加盟商是否接收:" prop="train_business_on">
+                    <el-form-item label="企业是否接收:" prop="train_business_on">
                         <el-radio-group v-model="ruleForm.train_business_on">
                             <el-radio :label="0">不接收</el-radio>
                             <el-radio :label="1">接收</el-radio>
@@ -76,10 +98,35 @@ export default {
   name: "training",
   data() {
     return {
+        pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
         breadcrumb: [
                 //面包屑
                 {
-                    name: "加盟商管理"
+                    name: "企业管理"
                 },
                 {
                     name: "培训列表",
@@ -96,7 +143,7 @@ export default {
             "train_type" : 1,// 培训类型 1门店5S管理培训 2店务培训 3美容服务技巧 4店长班 5服务话术培训 6偷偷美微掌柜
             "train_content" : "",//培训内容
             "train_url" : "",//培训链接
-            "train_business_on" : 1,//加盟商是否接收
+            "train_business_on" : 1,//企业是否接收
             "train_shop_on" : 0,//门店是否接收
             "train_pic":"",//培训展示图
             "train_address":"",//培训地址
@@ -112,6 +159,12 @@ export default {
             ],
             train_content: [
             { required: true, message: '请填写培训内容', trigger: 'blur' }
+            ],
+            train_start_time:[
+                { required: true, message: '请填写培训开始时间', trigger: 'change' }
+            ],
+            train_end_time:[
+                { required: true, message: '请填写培训结束时间', trigger: 'change' }
             ],
             train_url: [
             { required: true, message: '请填写培训链接', trigger: 'blur' }
@@ -234,6 +287,16 @@ export default {
 .margin-auto{
     margin-left: 25%;
     margin-top: 25px;
+}
+#train_panel .el-input__inner{
+    width: 358px !important;
+}
+#train_panel .el-input{
+    width: 358px !important;
+}
+#train_panel .el-textarea{
+    width: 358px !important;
+
 }
 </style>
 

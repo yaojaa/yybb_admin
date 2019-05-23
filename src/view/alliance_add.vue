@@ -197,7 +197,7 @@
                 </el-select>                   
             </el-form-item>
 
-    <el-form-item label="加盟商类型">
+    <el-form-item label="企业类型">
     <el-radio-group v-model="ruleForm.business_type">
       <el-radio :label="1">加盟</el-radio>
       <el-radio :label="2">非加盟</el-radio>
@@ -252,16 +252,16 @@ export default {
       breadcrumb: [
         //面包屑
         {
-          name: "加盟商管理", //名字
+          name: "企业管理", //名字
           url:'alliance'
         },
         {
-          name: "添加加盟商" //名字
+          name: "添加企业" //名字
         }
       ],
 
       ruleForm:{
-    "business_phone" : "",//加盟商手机号
+    "business_phone" : "",//企业手机号
     "business_company_name" : "",//公司名称
     "category_id" : [1,2,8],//行业id 3或[3]或[3,5,7]
     "business_type" : 1,//1加盟 2非加盟
@@ -284,7 +284,7 @@ export default {
     "business_discount_device" : 90,//线下仪器折扣
     "business_join_money" : 900,//加盟费用
     "business_join_reward" : 90,//推荐人奖励
-    "fid" : '',//推荐加盟商id
+    "fid" : '',//推荐企业id
   },
 
         rules: {
@@ -377,7 +377,7 @@ export default {
 
                     if(res.data.code == 0){
 
-                        this.$alert('添加加盟商成功！')
+                        this.$alert('添加企业成功！')
 
                         this.$router.push('/alliance')
 

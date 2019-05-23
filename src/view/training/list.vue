@@ -5,7 +5,7 @@
                 <bread-crumb :bread-crumb="breadcrumb"></bread-crumb>
             </div>
             <div class="page-header-actions">
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="$router.push({ path: '/training/add' })">添加干货培训</el-button>
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="$router.push({ path: '/training/add' })">添加培训</el-button>
             </div>
         </div>
         <div class="page-content">
@@ -36,7 +36,7 @@ export default {
             breadcrumb: [
                 //面包屑
                 {
-                    name: "加盟商管理"
+                    name: "企业管理"
                 },
                 {
                     name: "培训列表",
@@ -50,7 +50,8 @@ export default {
             remark: '无',
             status_filter: "",
             searchs: {
-                "list": [{
+                "list": [
+                    {
                         "type": "input-text", //输入文本
                         "label": "培训id",
                         "name": "id",
@@ -63,7 +64,20 @@ export default {
                         "name": "train_title",
                         "value": "",
                         "placeholder": "请输入培训标题",
-                    }
+                    },
+                    {
+                        "type": "input-singal-date", //输入日期
+                        "label": "开始时间",
+                        "name": "create_time_start",
+                        "value": "",
+                    },
+                    {
+                        "type": "input-singal-date", //输入日期
+                        "label": "结束时间",
+                        "name": "create_time_end",
+                        "value": "",
+                        
+                    },
                     // {
                     //     "type": "input-date", //输入日期
                     //     "label": "添加日期",
@@ -97,7 +111,7 @@ export default {
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "培训标题",
+                        "label": "培训课程标题",
                         "prop": "train_title",
                         "width": "200",
 
