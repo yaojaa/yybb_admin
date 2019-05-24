@@ -7,9 +7,9 @@
                     <el-select v-model="createdData.business_id" filterable placeholder="请选择">
                         <el-option
                             v-for="item in businessList"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value"
+                            :key="item.business_id"
+                            :label="item.business_name"
+                            :value="item.business_id"
                         >
                         </el-option>
                     </el-select>                                                   
@@ -497,6 +497,7 @@ export default {
   data() {
     return {
         renderList:[],
+        businessList: [], // 所有企业，目前支持北京
         industryForm:{}, // 所属行业分类
         quickBuyColumnList:[],//快买栏目后台数据
         quickList:[], //快买栏目model
@@ -838,9 +839,11 @@ export default {
             .then(res => {
             if (res.data.code == 0) {
                 const list = res.data.data;
-                this.businessList = list.forEach(item => {
+                list.forEach(item => {
                     return { value: item.business_id, label: item.business_name };
                 });
+                this.businessList = list;
+                console.log(this.businessList, 'businessList');
                 //console.log(this.industryForm,'industryForm')
             }
             });
