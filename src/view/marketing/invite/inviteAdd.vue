@@ -14,7 +14,7 @@
 
 
 
-            <div class="panel invite-box">
+            <div class="panel invite-box" id="invite_ld">
 
                 <div class="form-panel p-xl "  v-if="step==1">
                     <!--form start-->
@@ -36,7 +36,7 @@
                         :on-success="uploadActivityImg"
                         >
                         <img v-if="ruleForm.activity_img" :src="ruleForm.activity_img" class="avatar">
-                       <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:48px;margin-top:15%"></i>
+                       <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:48px"></i>
                       </el-upload>
                       <div class="upload-title">
                           <p class="upload-title-red">支持上传一张图片，图片宽高比为1242*1242，支持JPEG、PNG 等大部分图片格式</p>
@@ -90,7 +90,7 @@
                          <div class="item-choice" >
                           
                             <div class="choiced" v-if="skuItem.coupon_code">
-                              <div class="goods-div ">
+                              <div class="goods-div " @click="choiceClick(index)">
                                     <div class="goods-div-left">
                                       <p class="margin-top10"><span class="price">¥{{skuItem.reduce_price/100}}</span><span>{{skuItem.coupon_title}}</span></p>
                                       <p class="margin-top10">满{{skuItem.price/100}}元可用</p>
@@ -113,8 +113,8 @@
                               :show-file-list="false"
                               :on-success="show_img.bind(null, {'index':index})" :data="skuItem"
                               >
-                            <img max-width="238px" max-height="100px" width="238px" height="100px" v-if="skuItem.gifts_img" :src="skuItem.gifts_img" >
-                              <div v-else  class="upload-img-icon"> 
+                            <img max-width="138px" max-height="100px" width="138px" height="100px" v-if="skuItem.gifts_img" :src="skuItem.gifts_img" >
+                              <div v-else  class="upload-img-icon">
                                 <i class="el-icon-plus position-icon" style="font-size:48px"></i>
                               </div>       
                             </el-upload>
@@ -768,13 +768,13 @@ export default {
     margin: auto;
     margin-top:30px;
   }
-  .goods-div{
+#invite_ld .goods-div{
     width:211px;
     height: 70px;
     font-size: 12px;
     color:#fff;
     border-radius:6px;
-    background-color: #fff;
+    background-color: #7224D8;
   }
 .clearfix:after{
   content:".";
@@ -799,7 +799,7 @@ export default {
   .price{
     font-size: 16px;
     font-weight: bold;
-    color:#333;
+    color:#fff;
     margin-right:6px;
   }
   .margin-top10{
@@ -851,6 +851,11 @@ export default {
 .width980{
   width:980px;
 }
+
+#invite_ld .el-input--small,#invite_ld .el-textarea__inner{
+  max-width: 370px;
+}
+
 </style>
 
 

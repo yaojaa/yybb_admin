@@ -92,8 +92,8 @@ export default {
                     url: '/marketing/markList'
                 },
                 {
-                    name: "满减/立减优惠券", //名字
-                    url: '/marketing/fullReducionCouponList'
+                    name: "折扣券", //名字
+                    url: '/marketing/discount/list'
                 }
             ],
             user: JSON.parse(localStorage.user),
@@ -113,59 +113,34 @@ export default {
             currentItem: {},
             status_filter: "",
             tagsListGroup: {
-                '优惠券类型:': [
+                '活动状态:': [
                     { title: '全部', key: 'coupon_rule_type', value: 0 },
-                    { title: '满减', key: 'coupon_rule_type', value: 1 },
-                    { title: '立减', key: 'coupon_rule_type', value: 2 }
-                ],
-                 '活动专属:': [
-                    { title: '全部', key: 'coupon_in_shop', value: 0 },
-                    { title: '是', key: 'coupon_in_shop', value: 2 },
-                    { title: '否', key: 'coupon_in_shop', value: 1 }
+                    { title: '上架', key: 'coupon_rule_type', value: 1 },
+                    { title: '下架', key: 'coupon_rule_type', value: 2 }
                 ]
             },
             searchs: {
                 "list": [
                     {
                         "type": "input-text", //输入文本
-                        "label": "优惠券ID",
+                        "label": "折扣券ID",
                         "name": "coupon_code",
                         "value": "",
                         "placeholder": "",
 
-                    },
-                    {
-                        "type": "input-text", //输入文本
-                        "label": "标题",
-                        "name": "coupon_title",
-                        "value": "",
-                        "placeholder": "",
-
-                    },
-                    {
-                        "type": "input-singal-date", //输入日期
-                        "label": "开始时间",
-                        "name": "start_time",
-                        "value": "",
-                    },
-                    {
-                        "type": "input-singal-date", //输入日期
-                        "label": "结束时间",
-                        "name": "end_time",
-                        "value": "",
                     }
                     
                    
                 ]
             },
-            url: "/api/admin/coupon/index?coupon_rule_type=0",
+            url: "/api/admin/activity/index?activity_rule_type=7",
 
             tableJson: {
                 "column": [ //行
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "优惠券ID",
+                        "label": "折扣券ID",
                         "prop": "coupon_code",
                         "width": "120px",
                        
@@ -178,24 +153,7 @@ export default {
                         "width": "200",
 
                     },
-                    {
-                        "type": "text",
-                        "align": "center",
-                        "label": "类型",
-                        "prop": "coupon_rule_type",
-                        "width": "60px",
-                        formatter(row) {
-                            return row.coupon_rule_type == 1 ? `<p style='text-align: center'>满减</p>` : `<p style='text-align: center'>立减</p>`
-                        }
-                        // formatter(row) {
-                        //     if(row.coupon_rule_type==1){
-                        //         return `<p style='text-align: center'>满减</p>`;
-                        //     }
-                        //     if(row.coupon_rule_type==2){
-                        //         return `<p style='text-align: center'>立减</p>`;
-                        //     }
-                        // }
-                    },
+                    
                     {
                         "type": "text",
                         "align": "center",
@@ -207,19 +165,34 @@ export default {
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "满减(元)",
-                        "prop": "shop_name",
-                        "width": "150px",
-                        formatter(row) {
-                            if(row.rules){
-                                return `<p style='text-align: center'>
-                                满${(row.rules.price/100)}</br>
-                                减${(row.rules.reduce_price/100)}</p>`;
-                            }
-                        }
+                        "label": "面值",
+                        "prop": "coupon_title",
+                        "width": "200px",
 
                     },
                     
+                    {
+                        "type": "text",
+                        "align": "center",
+                        "label": "创建人",
+                        "prop": "admin_user_name",
+                        "width":"120px"
+
+                    },
+                    {
+                        "type": "text",
+                        "align": "center",
+                        "label": "有效期",
+                        "prop": "coupon_expire",
+                        "width": "",
+                        formatter(row) {
+                            return `<p style='text-align: center'>
+                            ${row.activity_start_time||""}<br/>至<br/>
+                            ${row.activity_end_time||""}</p>`;
+                           
+                        }
+
+                    },
                     
                     {
                         "type": "text",
@@ -248,17 +221,7 @@ export default {
 							"align": "center",
 							"width": "",
 							"list": [
-                                {
-									"label": "生成兑换券",
-									"type": "edit",
-									// "url": "", //优先执行url
-									onClick(tablePage, self, record) {
-										
-										self.creatCode(record)
-									}
-                                },
                                 
-
                                 {
 									"label": "已用门店",
 									"type": "edit",
@@ -402,15 +365,15 @@ export default {
 
             })
         },
-        //生成兑换码
-        creatCode(params){
-            this.dialogCode = true
-            this.coupon_code = params.coupon_code
-            this.coupon_status = params.coupon_status
-            console.log(params,'params-------')
+        // //生成兑换码
+        // creatCode(params){
+        //     this.dialogCode = true
+        //     this.coupon_code = params.coupon_code
+        //     this.coupon_status = params.coupon_status
+        //     console.log(params,'params-------')
             
 
-        },
+        // },
         //调用子组件的gatData方法
         //
         listenSwitchChange(data) {

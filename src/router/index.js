@@ -233,6 +233,33 @@ export default new Router({
                         permission: true
                     }
                 },
+                {
+                    // 搜索
+                    path: '/manage/search/list',
+                    component: resolve => require(['../view/search/list.vue'], resolve),
+                    meta: {
+                        title: '搜索',
+                        permission: true
+                    }
+                },
+                {
+                    // 搜索add
+                    path: '/manage/search/add',
+                    component: resolve => require(['../view/search/add.vue'], resolve),
+                    meta: {
+                        title: '添加搜索',
+                        permission: true
+                    }
+                },
+                {
+                    // 编辑add
+                    path: '/manage/search/add/:id',
+                    component: resolve => require(['../view/search/add.vue'], resolve),
+                    meta: {
+                        title: '编辑搜索',
+                        permission: true
+                    }
+                },
                 
                 {
                     // 案例添加

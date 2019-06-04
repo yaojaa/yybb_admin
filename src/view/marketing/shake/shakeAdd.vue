@@ -14,11 +14,11 @@
 
 
 
-            <div class="panel ">
+            <div class="panel " id="shake">
 
                 <div class="form-panel p-xl "  v-if="step==1">
                     <!--form start-->
-                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm1" label-width="100px" class="demo-ruleForm width720" >
+                    <el-form :model="ruleForm" :rules="rules" ref="ruleForm1" label-width="100px" class="demo-ruleForm " >
 
                     <el-form-item label="活动名称：" prop="activity_title">
                         <el-input v-model="ruleForm.activity_title"></el-input>
@@ -36,7 +36,7 @@
                         :on-success="uploadActivityImg"
                         >
                        <img v-if="ruleForm.activity_img" :src="ruleForm.activity_img" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:48px;margin-top:15%"></i>
+                        <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:48px"></i>
                       </el-upload>
                   <div class="upload-title">
                       <p class="upload-title-red">支持上传一张图片，图片宽高比为1242*1242，支持JPEG、PNG 等大部分图片格式</p>
@@ -67,7 +67,7 @@
                         <el-col :span="10">
                           <el-date-picker type="date" style="width:100%" placeholder="选择日期" v-model="ruleForm.activity_start_time" value-format="yyyy-MM-dd"></el-date-picker>
                         </el-col>
-                        <el-col class="line-center" :span="4">至</el-col>
+                        <el-col class="line-center" :span="2">至</el-col>
                         <el-col :span="10">
                           <el-date-picker type="date" style="width:100%" placeholder="选择日期" v-model="ruleForm.activity_end_time"  value-format="yyyy-MM-dd"></el-date-picker>
                         </el-col>
@@ -77,7 +77,7 @@
                       <el-col :span="12">
                         <el-input v-model="ruleForm.limits.limit_times" placeholder="请输入"></el-input><span></span>
                       </el-col>
-                      <el-col :span="4" class="line-center">
+                      <el-col :span="4" class="line-center" style="margin-left:-38px">
                         <span>次</span>
                       </el-col>
                     </el-form-item>
@@ -90,7 +90,7 @@
                               </div>
                             </el-col>
                          
-                            <el-col :span="12">
+                            <el-col :span="12" style="margin-left:-56px">
                               <el-radio :label="1">限制<el-input v-model="ruleForm.limits.limit_total_times"></el-input>次</el-radio>
                             </el-col>
                            
@@ -998,12 +998,13 @@ export default {
     margin: auto;
     margin-top:30px;
   }
-  .goods-div{
+  #shake .goods-div{
     width:211px;
     height: 70px;
     font-size: 12px;
     color:#fff;
     border-radius:6px;
+    background-color: #7224D8;
     
   }
 .clearfix:after{
@@ -1029,7 +1030,7 @@ export default {
   .price{
     font-size: 16px;
     font-weight: bold;
-    color:#333;
+    color:#fff;
     margin-right:6px;
   }
   .margin-top10{
@@ -1082,6 +1083,10 @@ export default {
   width:980px;
 }
 
+
+#shake .el-input--small,#shake .el-textarea__inner{
+  max-width: 370px;
+}
 
 </style>
 

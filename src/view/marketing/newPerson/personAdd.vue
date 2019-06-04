@@ -14,7 +14,7 @@
 
 
 
-            <div class="panel">
+            <div class="panel" id="new_person">
 
                 <div class="form-panel p-xl "  v-if="step==1">
                     <!--form start-->
@@ -36,7 +36,7 @@
                         :on-success="uploadActivityImg"
                         >
                         <img v-if="ruleForm.activity_img" :src="ruleForm.activity_img" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:48px;margin-top:15%"></i>
+                        <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:48px"></i>
                       </el-upload>
                   <div class="upload-title">
                       <p class="upload-title-red">支持上传一张图片，图片宽高比为1242*1242，支持JPEG、PNG 等大部分图片格式</p>
@@ -61,11 +61,7 @@
                 <!--步骤2-->
 
                 <div class="form-panel p-xl width720" v-if="step==2">
-                  <el-form :model="ruleForm" :rules="rules" ref="ruleForm2" label-width="160px" class="demo-ruleForm" >
-                    
-                   
-                   
-                  </el-form>
+                  
                   <p class="gift-title"> 设置奖品</p>
                   <p class="gift-title">以下奖品必须全部选择，否则无法上架</p>
                   <div class="gift-table left0 width980" >
@@ -77,7 +73,7 @@
                          <div class="item-choice" >
                           
                             <div class="choiced" v-if="skuItem.coupon_code">
-                              <div class="goods-div ">
+                              <div class="goods-div " @click="choiceClick(skuItem.idx)">
                                     <div class="goods-div-left">
                                       <p class="margin-top10"><span class="price">¥{{skuItem.reduce_price/100}}</span><span>{{skuItem.coupon_title}}</span></p>
                                       <p class="margin-top10">满{{skuItem.price/100}}元可用</p>
@@ -816,13 +812,13 @@ export default {
     margin: auto;
     margin-top:30px;
   }
-  .goods-div{
+  #new_person .goods-div{
     width:211px;
     height: 70px;
     font-size: 12px;
     color:#fff;
     border-radius:6px;
-    background-color: #fff;
+    background-color: #7224D8;
   }
 .clearfix:after{
   content:".";
@@ -847,7 +843,7 @@ export default {
   .price{
     font-size: 16px;
     font-weight: bold;
-    color:#333;
+    color:#fff;
     margin-right:6px;
   }
   .margin-top10{
@@ -898,6 +894,12 @@ export default {
 }
 .width980{
   width:980px;
+}
+#new_person .el-input--small,#new_person .el-textarea__inner{
+  max-width: 370px;
+}
+#new_person .el-checkbox:first-of-type{
+  margin-left: 30px;
 }
 
 </style>

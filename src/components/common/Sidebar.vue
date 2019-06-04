@@ -98,6 +98,14 @@
                                 title: '标签管理'
                             },
                             {
+                                index: '/manage/search/list',
+                                title: '搜索'
+                            },
+                            {
+                                index: '/admin/news/list',
+                                title: '消息通知'
+                            },
+                            {
                                 index: '/manage/complaintEnterpriseList/list',
                                 title: '投诉企业'
                             },
@@ -211,11 +219,8 @@
                             {
                                 index: '/admin/roleList',
                                 title: '角色管理'
-                            },
-                            {
-                                index: '/admin/news/list',
-                                title: '消息推送'
                             }
+                            
                             
                         ]
                     },

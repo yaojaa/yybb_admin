@@ -97,7 +97,7 @@
                                 </div>
 
                                 <div class="item">
-                                    <div class="hd">归属企业：</div>
+                                    <div class="hd">归属加盟商：</div>
                                     <div class="bd">{{info.business_name}}</div>
                                 </div>
 
@@ -124,7 +124,7 @@
     </div>
 </template>
 <script>
-import BreadCrumb from "@/components/common/BreadCrumb"
+import BreadCrumb from "@/components/common/BreadCrumb";
 export default {
     name: 'detail',
     data() {

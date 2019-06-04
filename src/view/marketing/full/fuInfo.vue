@@ -7,7 +7,7 @@
         </div>
         <div class="page-content">
 
-            <div class="panel">
+            <div class="panel" >
 
                 <div class="form-panel p-xl" >
                     <!--form start-->
@@ -21,7 +21,7 @@
                             {{ruleForm.activity_subject}}
                         </el-form-item>
                         <el-form-item label="封面图：" >
-                            <img v-if="ruleForm.activity_img" :src="ruleForm.activity_img" class="avatar" width="200px" height="150px">
+                            <img v-if="ruleForm.activity_img" :src="ruleForm.activity_img" class="avatar" >
                         </el-form-item>
 
                         <el-form-item label="活动规则：">
@@ -49,7 +49,7 @@
                                 <div class="person-item ">
                                     满{{skuItem.price/100}}元
                                 </div>
-                                <div class="person-item">
+                                <div class="person-item" v-if="skuItem.coupon_type==1">
                                     <div class="goods-div ">
                                       <div class="goods-div-left">
                                         <p class="margin-top10"><span class="price">¥{{skuItem.reduce_price/100}}</span><span>{{skuItem.coupon_title}}</span></p>
@@ -61,10 +61,16 @@
                                       </div>
                                     </div>
                                 </div>
-                                <div class="person-item ">
+                                <div v-else class="person-item ">
+                                  <el-row>
+                                    <el-col :span="14">返{{skuItem.percentage}}%卡金</el-col>
+                                  </el-row>
+
+                                </div>
+                                <!-- <div >
                                   <img :src="skuItem.image" alt="" width="238px" height="100px">
                                     
-                                </div>
+                                </div> -->
                             
                             </div>
                         </div>
@@ -110,11 +116,11 @@ export default {
         {
           name:"赠送商品",
           index:2
-        },
-        {
-          name:"赠送商品图",
-          index:3
         }
+        // {
+        //   name:"赠送商品图",
+        //   index:3
+        // }
         
       ],
       
@@ -366,7 +372,7 @@ export default {
     font-size: 12px;
     color:#fff;
     border-radius:6px;
-    background-color: #fff;
+    background-color: #7224d8;
   }
 .clearfix:after{
   content:".";
@@ -391,7 +397,7 @@ export default {
   .price{
     font-size: 16px;
     font-weight: bold;
-    color:#333;
+    color:#fff;
     margin-right:6px;
   }
   .margin-top10{
@@ -443,7 +449,12 @@ export default {
 .width980{
   width:980px;
 }
-
+.avatar{
+   max-width: 360px;
+  width: 358px;
+  height: 176px;
+  max-height: 176px
+}
 </style>
 
 

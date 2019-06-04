@@ -14,7 +14,7 @@
 
 
 
-            <div class="panel">
+            <div class="panel" id="help_add">
 
                 <div class="form-panel p-xl"  v-if="step==1">
                     <!--form start-->
@@ -36,7 +36,7 @@
                         :on-success="uploadActivityImg"
                         >
                         <img v-if="ruleForm.activity_img" :src="ruleForm.activity_img" class="avatar help-upload-img">
-                        <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:48px;margin-top:15%"></i>
+                        <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:48px"></i>
                       </el-upload>
                   <div class="upload-title">
                       <p class="upload-title-red">支持上传一张图片，图片宽高比为1242*1242，支持JPEG、PNG 等大部分图片格式</p>
@@ -65,11 +65,11 @@
                     
                     <el-form-item label="活动时间：">
                         <el-col :span="11">
-                          <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.activity_start_time" style="width: 100%;"></el-date-picker>
+                          <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.activity_start_time" format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width: 100%;"></el-date-picker>
                         </el-col>
                         <el-col class="line-center" :span="2">至</el-col>
                         <el-col :span="11">
-                          <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.activity_end_time" style="width: 100%;"></el-date-picker>
+                          <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.activity_end_time"  format="yyyy-MM-dd" value-format="yyyy-MM-dd" style="width: 100%;"></el-date-picker>
                         </el-col>
                     </el-form-item>
 
@@ -97,7 +97,7 @@
                     </el-form-item>
 
                     <el-form-item label="类型：">
-                      <el-radio-group v-model="ruleForm.rules.bargain_type">
+                      <el-radio-group v-model="ruleForm.rules.goods_type">
                         <el-radio  :label="1">服务</el-radio>
                         <el-radio  :label="2">商品</el-radio>
                         <el-radio  :label="4">虚拟商品</el-radio>
@@ -106,40 +106,59 @@
                     <el-form-item>
                         <el-button @click="choiceGoodsClick">请选择</el-button>
                     </el-form-item>
+                    <el-form-item>
+                      <p style="font-size:12px; color:#999;line-height:1.8em">帮砍总额不得超过消费总额的30%；单人最高不得超过5%；新用户比老用户的帮砍金额贡献值更大，但不得超过单人上限的5%。
+例：原价100元，最高不超过30元，单人砍价不超过5元</p>
+                    </el-form-item>
                      <!-- 表单 -->
                      <div class="gift-table gift-person width980" >
                       <div class="table-th">
                         <div class="th-item" v-for="item in itemLIst" :key="item.index">{{item.name}}</div>
                       </div>
 
-                     <div class="table-body table-full "   v-for="item in ruleForm.rules.bargain" :key="item.good_id">
+                     <div class="table-body table-full "   v-for="(item,index) in ruleForm.rules.bargain" :key="index">
                        <div class="full-item  " >
                          <div class="full-item-left">
                            <img v-if="item.good_ico"  :src="item.good_ico" alt="" width="50px" height="50px">
                          </div>
                          <div class="full-item-right">
                            <p v-if="item.good_name">{{item.good_name}}</p>
-                           <p v-if="item.price">¥{{item.price}}</p>
+                           <p v-if="item.price">¥{{(item.price/100).toFixed(2)}}</p>
                          </div>
                        </div>
                        <div class="full-item"   >
                             <input type="text" v-model="item.max_price"  class="input-val">
                        </div>
                        <div class="full-item"  >
-                            <input type="text" v-model="item.reduce_solid_price"  class="input-val">
+                            <p style="display:flex; justify-content:center;align-items:center"><input type="text" v-model="item.users"  class="input-val"><span class="person">人</span></p>
                        </div>
                        <div class="full-item"  >
-                           <p style="display:flex;margin-top:20px; margin-bottom:10px;"><span style="margin-left:20px">最大值：</span><input type="text" v-model="item.reduce_max_price"  class="max-input-val"></p>
-                           <p style="display:flex;margin-top:20px; margin-bottom:10px;"><span style="margin-left:20px">最小值：</span><input type="text" v-model="item.reduce_min_price"  class="max-input-val"></p>
+                            <input type="text" v-model="item.new_user_price"  class="input-val">
+                       </div>
+                       <div class="full-item"  >
+                           <p style="display:flex;margin-top:20px; margin-bottom:10px;"><span style="margin-left:20px">最大值：</span><input type="text" v-model="item.old_user_max_price"  class="max-input-val"></p>
+                           <p style="display:flex;margin-top:20px; margin-bottom:10px;"><span style="margin-left:20px">最小值：</span><input type="text" v-model="item.old_user_min_price"  class="max-input-val"></p>
                         
                        </div>
-                       <div class="full-item">
-                            <input type="text" v-model="item.first_solid_price"  class="input-val">
+                       <div class="full-item ">
+                         <div class="choice-button"   @click="choiceClick(index)">+请选择</div>
+                            <div class="choiced" v-if="couponListFlag">
+                              <div class="coupon-div relative" v-for="(skuItem,idx) in item.coupon_list" :key="idx">
+                                    <div class=" coupon-div-left">
+                                      <p class="margin-top10"><span class="price">¥{{skuItem.rules.reduce_price/100}}</span><span>{{skuItem.coupon_title}}</span></p>
+                                      <p class="margin-top10">满{{skuItem.rules.price/100}}元可用</p>
+                                    </div>
+                                    <div class=" coupon-div-right">
+                                     <img v-if="item.coupon_img" :src="skuItem.coupon_img" width="70px" height="70px">
+                                     <p v-else class="coupon-div-img">暂无图片</p>
+                                    </div>
+                                    <p class="remove-coupon" @click="removeCoupon(index,idx)">X</p>
+                              </div>
+                            </div>
+                            
                        </div>
                        <div class="full-item" >
-                          <p style="display:flex;margin-top:20px; margin-bottom:10px;"><span style="margin-left:20px">最大值：</span><input type="text" v-model="item.first_max_price"  class="max-input-val"></p>
-                               
-                            <p style="display:flex;margin-top:20px; margin-bottom:10px;"><span style="margin-left:20px">最小值：</span><input type="text" v-model="item.first_min_price"  class="max-input-val"></p>   
+                           <div class="choice-button"   @click="lookClick(index)">查看</div>
  
                        </div>
                        
@@ -208,6 +227,72 @@
                             <el-button type="primary" @click="helpSure">确 定</el-button>
                         </div> 
                     </el-dialog>
+
+                    <!-- 优惠券 -->
+                    <el-dialog title="选择指定商品" :visible.sync="couponVisible" >
+                       <el-form-item>
+                         <div v-if="couponShow" class="good_show">
+                                      <div class="goods-div " v-for="item in couponData" :key="item.coupon_id">
+                                          <div class="goods-div-left">
+                                            <p class="margin-top10"><span class="price">¥{{item.rules.reduce_price/100}}</span><span>{{item.coupon_title}}</span></p>
+                                            <p class="margin-top10">满{{item.rules.price/100}}元可用</p>
+                                          </div>
+                                          <div class="goods-div-right">
+                                          <img v-if="item.coupon_img" :src="item.coupon_img" width="70px" height="70px">
+                                          <p v-else class="no-img">暂无图片</p>
+                                          </div>
+                                      </div>
+                                </div> 
+                            
+                           
+                                
+                            </el-form-item>
+                           
+                            
+                        
+
+                        <el-tabs type="border-card" :tab-position="tabPosition" style="height: 200px;"  v-model="couponId">
+                            <el-tab-pane v-for="item in industryList" :label="item.name"  :value="item.type" :key="`${item.type}type`">
+                                <el-checkbox v-model="radioGoodsList" :label="item.coupon_code" :key="item.coupon_code" v-for="item in couponDataList">
+                                  <div class="goods-div ">
+                                    <div class="goods-div-left">
+                                      <p class="margin-top10"><span class="price">¥{{item.rules.reduce_price/100}}</span><span>{{item.coupon_title}}</span></p>
+                                      <p class="margin-top10">满{{item.rules.price/100}}元可用</p>
+                                    </div>
+                                    <div class="goods-div-right">
+                                     <img v-if="item.coupon_img" :src="item.coupon_img" width="70px" height="70px">
+                                     <p v-else class="no-img">暂无图片</p>
+                                    </div>
+                                  </div>
+                                  
+                                  </el-checkbox>
+                            </el-tab-pane>
+                        </el-tabs>
+                        
+                        
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="goodsCancal">取 消</el-button>
+                            <el-button type="primary" @click="goodsSure">确 定</el-button>
+                        </div> 
+                    </el-dialog>
+                    <el-dialog
+                        title="已选优惠券"
+                        :visible.sync="choicedCouponVisible"
+                        width="30%"
+                        center>
+                        <div class="goods-div " v-for="item in choicedCouponData" :key="item.coupon_id">
+                                          <div class="goods-div-left">
+                                            <p class="margin-top10"><span class="price">¥{{item.rules.reduce_price/100}}</span><span>{{item.coupon_title}}</span></p>
+                                            <p class="margin-top10">满{{item.rules.price/100}}元可用</p>
+                                          </div>
+                                          <div class="goods-div-right">
+                                          <img v-if="item.coupon_img" :src="item.coupon_img" width="70px" height="70px">
+                                          <p v-else class="no-img">暂无图片</p>
+                                          </div>
+                                      </div>
+                        
+                        
+                  </el-dialog>
                 </div>
                 
                   </el-form>
@@ -219,7 +304,6 @@
 
 
 
-<!--form end-->
             </div>
         </div>
     </div>
@@ -236,7 +320,17 @@ export default {
 
   data() {
     return {
-       
+      choicedCouponData:[],
+      choicedCouponVisible:false,
+      couponListFlag:false,
+      couponChoiceFlag:true,
+      couponData:[],
+      couponDataList:[],
+      couponId:"",
+      couponShow:false,
+      couponList:[],
+      radioGoodsList:[],
+       couponVisible:false,
       dataList:[],
       goodShow:false,
       index:"1",
@@ -250,6 +344,28 @@ export default {
       "tabPosition":"left",
       limit_total_times:"",
       step: 1,
+      industryList:[
+        {
+          name:"通用券",
+          type:1
+        },
+        {
+          name:"行业券",
+          type:2
+        },
+        {
+          name:"服务券",
+          type:3
+        },
+        {
+          name:"商品券",
+          type:4
+        },
+        {
+          name:"虚拟商品券",
+          type:5
+        }
+      ],
       industryForm:[
         {
           name:"通用券",
@@ -280,24 +396,28 @@ export default {
           index:1
         },
         {
-          name:"最高优惠",
+          name:"最高返现",
           index:2
         },
         {
-          name:"新用户砍价",
+          name:"可返现",
           index:3
         },
         {
-          name:"老用户砍价",
+          name:"新用户砍价",
           index:4
         },
         {
-          name:"新用户奖励",
+          name:"老用户砍价",
           index:5
         },
         {
-          name:"老用户奖励",
+          name:"选择优惠券",
           index:6
+        },
+        {
+          name:"查看已选优惠券",
+          index:7
         }
       ],
       
@@ -325,8 +445,11 @@ export default {
         "activity_start_time": "", //活动开始时间
         "activity_end_time": "", //活动结束时间
         "rules" : {  // 帮砍规则
-           "bargain_type":1,
+           "goods_type":1,
            "days":"",
+           "bargain":[
+             
+           ]
         }
         
       },
@@ -347,13 +470,62 @@ export default {
     };
   },
   methods:{
+    lookClick(index){
+      this.choicedCouponVisible = true;
+      this.choicedCouponData = this.ruleForm.rules.bargain[index].coupon_list
+    },
+    removeCoupon(index,idx){
+      
+      
+      this.ruleForm.rules.bargain[index].coupon_list.splice(idx,1)
+        //this.ruleForm.rules.bargain[idx].coupon_list.splice(index,1)
+     
+      
+      
+
+    },
+    goodsSure(){
+      
+      
+      this.ruleForm.rules.bargain[this.index-1].coupon_list = this.couponData
+      if(this.couponData.length==0){
+        this.$alert('请最少选择一个优惠券')
+      }
+      if(this.couponData.length==5){
+        this.$alert('最多选择五个优惠券')
+      }
+
+      console.log(this.ruleForm.rules.bargain,'this.ruleForm.rules')
+      debugger
+      this.couponVisible = false;
+      this.couponListFlag = true;
+      this.couponChoiceFlag = false
+      // this.couponFlagChoice = false;
+             
+          
+          
+      },
+    getCouponList(){
+      this.$axios.get("/api/admin/select/coupon?type=1").then(res =>{
+          if(res.data.code ==0){
+            this.couponDataList = res.data.data
+          }
+
+        })
+    },
+    choiceClick(_index){
+      this.index = _index;
+      this.couponVisible = true
+      this.couponData = []
+      this.couponDataList =[]
+    },
     
       choiceGoodsClick(){
-        
+          //debugger
           this.goodsVisible = true
           this.goodsData = []
           this.checkedList = []
-          this.$axios.get("/api/admin/select/goodsList?type=1&category_id="+this.index+"&good_type="+this.ruleForm.rules.bargain_type).then(res =>{
+          this.$axios.get("/api/admin/select/goodsList?type=1&category_id="+this.index+"&good_type="+this.ruleForm.rules.goods_type).then(res =>{
                 if(res.data.code ==0){
                     this.goodsList = res.data.data;
                     console.log(this.goodsList,'goodsList55555')
@@ -369,21 +541,21 @@ export default {
       
       
       this.ruleForm.rules.bargain = this.goodsData
-      debugger
+      //debugger
       for(var i = 0; i<this.ruleForm.rules.bargain.length; i++){
           this.ruleForm.rules.bargain[i].goods_id = this.goodsData[i].good_id;
           this.ruleForm.rules.bargain[i].max_price = "";
-          this.ruleForm.rules.bargain[i].reduce_solid_price = "";
-          this.ruleForm.rules.bargain[i].reduce_min_price = "";
-          this.ruleForm.rules.bargain[i].reduce_max_price = "";
-          this.ruleForm.rules.bargain[i].first_solid_price = "";
-          this.ruleForm.rules.bargain[i].first_min_price = "";
-          this.ruleForm.rules.bargain[i].first_max_price = "";
+          this.ruleForm.rules.bargain[i].new_user_price = "";
+          this.ruleForm.rules.bargain[i].old_user_max_price = "";
+          this.ruleForm.rules.bargain[i].old_user_min_price = "";
+          // this.ruleForm.rules.bargain[i].first_solid_price = "";
+          // this.ruleForm.rules.bargain[i].first_min_price = "";
+          // this.ruleForm.rules.bargain[i].first_max_price = "";
           
       }
 
     //   this.ruleForm.rules.days = this.days
-        debugger
+        //debugger
      
           
       },
@@ -424,12 +596,12 @@ export default {
         
         for(let i=0; i<this.ruleForm.rules.bargain.length; i++){
         obj.rules.bargain[i].max_price = this.ruleForm.rules.bargain[i].max_price*100
-        obj.rules.bargain[i].reduce_solid_price = this.ruleForm.rules.bargain[i].reduce_solid_price*100
-        obj.rules.bargain[i].reduce_min_price = this.ruleForm.rules.bargain[i].reduce_min_price*100
-        obj.rules.bargain[i].reduce_max_price = this.ruleForm.rules.bargain[i].reduce_max_price*100
-        obj.rules.bargain[i].first_solid_price = this.ruleForm.rules.bargain[i].first_solid_price*100
-        obj.rules.bargain[i].first_min_price = this.ruleForm.rules.bargain[i].first_min_price*100
-        obj.rules.bargain[i].first_max_price =  this.ruleForm.rules.bargain[i].first_max_price*100
+        obj.rules.bargain[i].new_user_price = this.ruleForm.rules.bargain[i].new_user_price*100
+        obj.rules.bargain[i].old_user_max_price = this.ruleForm.rules.bargain[i].old_user_max_price*100
+        obj.rules.bargain[i].old_user_min_price = this.ruleForm.rules.bargain[i].old_user_min_price*100
+        // obj.rules.bargain[i].first_solid_price = this.ruleForm.rules.bargain[i].first_solid_price*100
+        // obj.rules.bargain[i].first_min_price = this.ruleForm.rules.bargain[i].first_min_price*100
+        // obj.rules.bargain[i].first_max_price =  this.ruleForm.rules.bargain[i].first_max_price*100
 
         }
         if (Object.keys(params).length) {
@@ -473,13 +645,33 @@ export default {
             val = Number(val)+1
             this.index= val 
 
-            this.$axios.get("/api/admin/select/goodsList?type=1&good_type="+this.ruleForm.rules.bargain_type+"&category_id="+val).then(res =>{
+            this.$axios.get("/api/admin/select/goodsList?type=1&good_type="+this.ruleForm.rules.goods_type+"&category_id="+val).then(res =>{
                 if(res.data.code ==0){
                     this.goodsList = res.data.data;
                     console.log(this.goodsList,'goodsList111111')
                 }
             })
             
+        },
+        "couponId":function(val){
+            val = Number(val)+1
+            this.index= val 
+           
+            console.log(val,'val')
+            // var parms ={
+            //     "good_type":2,
+            //     "category_id":this.industryForm[val].category_id
+            // }
+            // console.log(parms,'parms')
+            //观察tab选项卡改变调用接口
+            this.$axios.get("/api/admin/select/coupon?type="+val).then(res =>{
+                if(res.data.code ==0){
+                    this.couponDataList = res.data.data;
+                    //console.log(this.goodsList,'goodsList')
+                    
+
+                }
+            })
         },
         "checkedList":function(e){
           console.log(e,'eee');
@@ -495,6 +687,21 @@ export default {
           console.log(this.goodsData,'this.goodsData22222')
           this.goodShow = true
                 
+        },
+        "radioGoodsList":function(e){
+            console.log(e,'e1e1e1')
+            this.couponData = []
+            console.log(this.couponDataList,'couponDataList')
+          for(var i = 0; i<this.couponDataList.length; i++){
+            for(var j = 0; j<e.length; j++){
+              if(this.couponDataList[i].coupon_code==e[j]){
+                this.couponDataList[i].coupon_code = e[j]
+                this.couponData.push(this.couponDataList[i])
+              }
+            }
+          } 
+          console.log(this.couponData,'this.couponData2222')
+          this.couponShow = true
         }
         
     },
@@ -517,17 +724,23 @@ export default {
         console.log(params,'params')
         this.$axios.post("/api/admin/activity/info",params).then(res => {
           console.log(res.data.data,'data----data')
-          
+          this.ruleForm = res.data.data
+          this.couponListFlag = true;
 
 
-            for(let i=0; i<this.ruleForm.rules.bargain.length;i++){
-              this.ruleForm.rules.bargain[i].max_price = this.ruleForm.rules.bargain[i].max_price/100
-               this.ruleForm.rules.bargain[i].reduce_solid_price = this.ruleForm.rules.bargain[i].reduce_solid_price/100
-                this.ruleForm.rules.bargain[i].reduce_min_price = this.ruleForm.rules.bargain[i].reduce_min_price/100
-                 this.ruleForm.rules.bargain[i].reduce_max_price = this.ruleForm.rules.bargain[i].reduce_max_price/100
-                  this.ruleForm.rules.bargain[i].first_solid_price = this.ruleForm.rules.bargain[i].first_solid_price/100
-                   this.ruleForm.rules.bargain[i].first_min_price = this.ruleForm.rules.bargain[i].first_min_price/100
-                    this.ruleForm.rules.bargain[i].first_max_price = this.ruleForm.rules.bargain[i].first_max_price/100
+            for(let i=0; i<res.data.data.rules.bargain.length;i++){
+              this.ruleForm.rules.bargain[i].max_price = res.data.data.rules.bargain[i].max_price/100
+               this.ruleForm.rules.bargain[i].new_user_price = res.data.data.rules.bargain[i].new_user_price/100
+                this.ruleForm.rules.bargain[i].old_user_max_price = res.data.data.rules.bargain[i].old_user_max_price/100
+                 this.ruleForm.rules.bargain[i].old_user_min_price = res.data.data.rules.bargain[i].old_user_min_price/100
+                  // this.ruleForm.rules.bargain[i].first_solid_price = res.data.data.rules.bargain[i].first_solid_price/100
+                  //  this.ruleForm.rules.bargain[i].first_min_price = res.data.data.rules.bargain[i].first_min_price/100
+                  //   this.ruleForm.rules.bargain[i].first_max_price = res.data.data.rules.bargain[i].first_max_price/100
+
+        // obj.rules.bargain[i].max_price = this.ruleForm.rules.bargain[i].max_price*100
+        // obj.rules.bargain[i].new_user_price = this.ruleForm.rules.bargain[i].new_user_price*100
+        // obj.rules.bargain[i].old_user_max_price = this.ruleForm.rules.bargain[i].old_user_max_price*100
+        // obj.rules.bargain[i].old_user_min_price = this.ruleForm.rules.bargain[i].old_user_min_price*100
             }
             //判断当前是限制还是不限制
             if(res.data.data.limits.limit_total_times==0){
@@ -538,7 +751,8 @@ export default {
         })
     }
      //this.getGoodsList(); //弹窗初始化接口
-     this.getCategoryList(); //获取行业列表  
+     this.getCategoryList(); //获取行业列表 
+     this.getCouponList();
   },
   computed: {}
 };
@@ -670,7 +884,7 @@ export default {
   }
  .full-item{
      width:100%;
-     height: 120px;
+     /* height: 120px; */
      float: left;
     
  }
@@ -1008,39 +1222,52 @@ export default {
 .width980{
   width:980px;
 }
-  .el-checkbox__input{
+
+p{
+  margin:0px;
+}
+
+.input-val{
+  width:40% !important;
+}
+.line-center{
+  text-align: center;
+  line-height:32px;
+}
+.gift-table{
+  font-size: 14px;
+}
+</style>
+<style lang="">
+
+
+#help_add  .el-checkbox__input{
   position: absolute ;
   right:6px ;
   top: 6px ;
   
 }
-.el-checkbox__input{
-  position: absolute ;
-  right:6px ;
-  top: 6px ;
-  
-}
-.el-dialog__body{
+#help_add .el-dialog__body{
   background-color: #fff;
 }
-.el-tabs__nav-wrap::after{
+#help_add .el-tabs__nav-wrap::after{
   background-color: #f6f6f6
 }
-.el-tabs__item{
+#help_add .el-tabs__item{
   color:#666;
 }
-.goods-div-left p{
+#help_add .goods-div-left p{
   color:#333;
 }
-.goods-div-left p.money{
+#help_add .goods-div-left p.money{
   color:#E89925 100%
 }
-.goods-div{
+#help_add .goods-div{
   border-radius:6px;
   box-shadow: 0px 0px 18px 0px rgba(211, 211, 211, 0.5);
   display: inline-block;
   margin-left: 10px;
-  background-color:#fff;
+  background-color: #fff;
 
 }
 p{
@@ -1057,7 +1284,87 @@ p{
 .gift-table{
   font-size: 14px;
 }
+#help_add .el-input--small,#help_add .el-textarea__inner{
+  max-width: 370px;
+}
+
+
+
+
+
+#help_add .person{
+  position: relative;
+  left: -22px;
+  top:22px;
+}
+#help_add .choice-button{
+  position: relative;
+  left: 32px;
+  /* top: 40px; */
+}
+#help_add .coupon-div{
+  width: 140px;
+  height: 70px;
+  font-size: 12px;
+  color:#333;
+  font-weight: normal;
+  border-radius:6px;
+  border:1px solid #ccc;
+  margin-bottom:10px;
+  border-radius:6px;
+ 
+  display: inline-block;
+  margin-left: 10px;
+  background-color: #fff;
+}
+#help_add .coupon-div-left{
+  float: left;
+  width:80px;
+  height: 70px;
+}
+#help_add .coupon-div-right{
+  float: left;
+  width: 60px;
+  height: 70px;
+  line-height: 70px;
+}
+#help_add .coupon-div-img{
+  width: 60px;
+  height: 70px;
+}
+#help_add .relative{
+  position: relative;
+  left: 0px;
+  top: 0px;
+}
+#help_add .remove-coupon{
+  background-color: red;
+  color: #fff;
+  font-size: 14px;
+  width: 20px;
+  height: 20px;
+  border-radius:10px;
+  position: absolute;
+  right:-6px;
+  top: -8px;
+  
+}
+
+
+#help_add .avatar-uploader .avatar-uploader-icon{
+  margin-top: 0px;
+}
+#help_add .el-checkbox__input{
+  position: absolute;
+  right: 6px;
+  top: 6px;
+
+}
 
 </style>
+
+
+
+
 
 

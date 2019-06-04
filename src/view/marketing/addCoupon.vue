@@ -10,39 +10,39 @@
                 <el-form :model="ruleForm" :rules="rules"  label-width="120px" class="demo-ruleForm">
 
                     <el-form-item label="优惠券标题:" prop="coupon_title">
-                        <el-col :span="12">
+                        <el-col :span="6">
                             <el-input v-model="ruleForm.coupon_title"></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="面值:">
-                        <el-col :span="12">
+                        <el-col :span="2">
                             <el-input v-model="ruleForm.rules.reduce_price"></el-input>
                         </el-col>
                     </el-form-item>
 
                      <el-form-item label="可使用次数:">
-                         <el-col :span="3">
+                         <el-col :span="2">
                             <el-input v-model="ruleForm.limits.limit_total_times"></el-input>
                         </el-col>
                     </el-form-item>
                     <el-form-item label="可使用频率:">
-                       <el-col :span="5">
+                       <el-col :span="4">
                         <!-- 如果选择不限制 那么 limit_times 就是0  -->
                         <el-radio-group  v-model="limitsStatus">
                             <el-radio :label="0">不限</el-radio> 
                             <el-radio :label="1">限制</el-radio>
                         </el-radio-group>
                        </el-col>
-                       <el-col :span="4">
+                       <el-col :span="4" style="margin-left:-20px">
                            <span>每</span>
-                            <el-select v-model="ruleForm.limits.limit_cycle" placeholder="请选择" style="width:100px">
+                            <el-select v-model="ruleForm.limits.limit_cycle" placeholder="请选择" style="width:60px">
                                 <el-option label="日" value="1"></el-option>
                                 <el-option label="周" value="2"></el-option>
                                 <el-option label="月" value="3"></el-option>
                             </el-select>
                        </el-col>
-                       <el-col :span="4">
-                           <el-input v-model="ruleForm.limits.limit_times" style="width:100px"></el-input><span>次</span>
+                       <el-col :span="4" style="margin-left:-80px">
+                           <el-input v-model="ruleForm.limits.limit_times" style="width:60px"></el-input><span>次</span>
                        </el-col>
                        
                     </el-form-item>
@@ -56,8 +56,8 @@
                         </el-radio-group>
                        </el-col>
                        
-                       <el-col :span="5">
-                           <el-input v-model="ruleForm.rules.price" style="width:100px"></el-input><span>元可用</span>
+                       <el-col :span="5" style="margin-left:-60px">
+                           <el-input v-model="ruleForm.rules.price" style="width:60px"></el-input><span>元可用</span>
                        </el-col>
                        
                     </el-form-item>
@@ -72,7 +72,7 @@
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="使用规则:">
-                        <el-col :span="18">
+                        <el-col :span="6">
                             <el-input type="textarea" :rows="6" placeholder="请输入内容" v-model="ruleForm.coupon_desc"></el-input>
                         </el-col>
                     </el-form-item>
@@ -181,7 +181,7 @@
                         </el-form-item>
 
                         <el-tabs type="border-card" :tab-position="tabPosition" style="height: 200px;"  v-model="activeId">
-                            <el-tab-pane v-for="item in industryForm" :label="item.category_name" v-bind:key="item.category_id"  :value="item.category_id" >
+                            <el-tab-pane v-for="item in industryForm" :label="item.category_name"  :value="item.category_id" >
                                 <p class="line-hidden" v-for="item in goodsList" :key="item.good_id"><el-radio v-model="radioGoodsId" :label="item.good_id"><img :src="item.good_ico" width="20px" height="20px"><span class="ml6">{{item.good_name}}</span></el-radio></p>
                                 
                             </el-tab-pane>
@@ -209,7 +209,7 @@
                         </el-form-item>
 
                         <el-tabs type="border-card" :tab-position="tabPosition" style="height: 200px;"  v-model="activeId">
-                            <el-tab-pane v-for="item in industryForm" :label="item.category_name" v-bind:key="item.category_id" :value="item.category_id" >
+                            <el-tab-pane v-for="item in industryForm" :label="item.category_name"  :value="item.category_id" >
                                 <p class="line-hidden" v-for="item in goodsList" :key="item.good_id"><el-radio v-model="radioServiceId" :label="item.good_id"><img :src="item.good_ico" width="30px" height="30px"><span class="ml6">{{item.good_name}}</span></el-radio></p>
                             </el-tab-pane>
                         </el-tabs>
@@ -237,7 +237,7 @@
                         </el-form-item>
 
                         <el-tabs type="border-card" :tab-position="tabPosition" style="height: 200px;"  v-model="activeId">
-                            <el-tab-pane v-for="item in industryForm" :label="item.category_name" v-bind:key="item.category_id" :value="item.category_id" >
+                            <el-tab-pane v-for="item in industryForm" :label="item.category_name"  :value="item.category_id" >
                                 <p class="line-hidden" v-for="item in goodsList" :key="item.good_id"><img :src="item.good_ico" width="30px" height="30px"><el-radio v-model="radioServiceId" :label="item.good_id"><span class="ml6">{{item.good_name}}</span></el-radio></p>
                                 
                             </el-tab-pane>
@@ -308,26 +308,26 @@ export default {
             "coupon_desc":"",//使用规则
             "coupon_code":"",
             "coupon_title" : "",//优惠券标题
-            "rules" : {  // 规则
+            rules: {  // 规则
                 "is_full" : 0, // 是否满减  
                 "price" : "",  // 满多少
                 "reduce_price" : ""  // 减多少
             },
 
-            "limits" : { // 参与限制
+            limits : { // 参与限制
                 "limit_cycle" : "1", // 限制周期  1 日 2周 3月
                 "limit_times" : "", // 周期内限制使用次数
                 "limit_total_times" : "", // 次数限制 0 不限
             },
-            "coupon_range" : { //弹窗列表选择
-                "category_id" : 1,
-                "goods_id" :  0
+            coupon_range:{
+                category_id:1,
+                goods_id:0
             },
             "coupon_expire_type":1,
             "coupon_in_shop":1,
             "coupon_range_type":1,
             "date_expire_type":0,
-            "coupon_expire" : {
+            coupon_expire : {
                 "coupon_expire_day" : "",  //固定天数时使用
                 "coupon_expire_start_time" :  "",
                 "coupon_expire_end_time" :  ""
@@ -375,6 +375,11 @@ export default {
     };
   },
   methods:{
+    cloneObj(obj) {
+        return JSON.parse(JSON.stringify(obj))
+    },
+
+    
       //次数限制功能
     //   limitsChange(e){
 
@@ -391,7 +396,7 @@ export default {
           
     //   },
       handleChange(e){
-        this.selectRadioId = e;
+       
         console.log(e,'eeee')
         //   var _this = this;
         //   console.log(this,'this')
@@ -403,19 +408,22 @@ export default {
             case 2: //行业  
               this.industryVisible = true 
             break;
-            case 3: //商品
+            case 3: //服务
                 this.serviceVisible = true  //服务弹窗
+                this.selectRadioId = 1;
                 this.serviceSearch()
             break;
-            case 4: //服务
+            case 4: //商品
                 
                 this.goodsVisible = true  //商品弹窗
                 this.goodsSearch()
+                this.selectRadioId = 2;
 
             break;
             case 5: //虚拟商品
                 this.inventedVisible = true
                 this.virGoodsSearch()
+                this.selectRadioId = 4;
             break;
             
                 //虚拟商品弹窗
@@ -468,6 +476,8 @@ export default {
       },
       goodsSure(){
           //商品弹窗确定
+          this.ruleForm.coupon_range = {}
+          debugger
           if(this.checkedGoodsId==""){
               console.log(this.checkedGoodsId,'checkedGoodsId')
               this.$alert('必须选择商品')
@@ -478,6 +488,8 @@ export default {
           }
       },
       inventedSure(){
+          this.ruleForm.coupon_range = {}
+          debugger
           console.log(this.checkedGoodsId,'222222222222')
           //虚拟商品确定
           if(this.checkedGoodsId==""){
@@ -490,6 +502,8 @@ export default {
           }
       },
       serviceSure(){
+          this.ruleForm.coupon_range = {}
+          debugger
           if(this.checkedGoodsId==""){
               console.log(this.checkedGoodsId,'checkedGoodsId')
               this.$alert('必须选择服务')
@@ -500,6 +514,7 @@ export default {
           }
       },
       goodsSearch(){
+          this.ruleForm.coupon_range = {}
           console.log('商品搜索--------')
         //商品搜索
         var goodName = this.goods_name;
@@ -542,10 +557,18 @@ export default {
 
       },
     submit(){
+        
         let params = this.$route.params;
-        var obj=JSON.parse(JSON.stringify(this.ruleForm));
+        const obj = this.cloneObj(this.ruleForm)
+        obj.coupon_range = this.ruleForm.coupon_range
+        // clone
+        // const obj = $.extend(true,{},this.ruleForm)
+        // const obj=JSON.parse(JSON.stringify(this.ruleForm))
+        // this.deepCopyLd(obj);
+        // debugger
         obj.rules.reduce_price=this.formatPrice(obj.rules.reduce_price);
-        obj.rules.price = this.formatPrice(obj.rules.price);
+        obj.rules.price = this.formatPrice(obj.rules.price)
+        // obj = JSON.parse(obj)
         debugger
         if (Object.keys(params).length) {
             this.ruleForm.coupon_code = params.coupon_code
@@ -672,13 +695,22 @@ export default {
                         this.limitsStatus = 1
                     }
                     console.log(this.limitsStatus,'limitsStatus')
+                    const list = {} 
+                    
 
                     const _obj = JSON.parse(JSON.stringify(res.data.data));
+                    for(var key in res.data.data.coupon_range){
+                        list[key] = res.data.data.coupon_range[key]
+                    }
+                    
                     _obj.rules.reduce_price = this.formatPrice1(_obj.rules.reduce_price)
                     _obj.rules.price = this.formatPrice1(_obj.rules.price)
                     this.dataStart = _obj.coupon_expire.coupon_expire_start_time 
                     this.dataEnd = _obj.coupon_expire.coupon_expire_end_time 
                     this.ruleForm = _obj
+                    this.ruleForm.coupon_range = list
+                    console.log(this.ruleForm,'ruleForm')
+
                    
 
                 }else{
@@ -700,6 +732,9 @@ export default {
  .el-textarea__inner{
     width: 100%;
     max-width: 100%;
+}
+.el-radio{
+    font-weight: normal !important
 }
 
 

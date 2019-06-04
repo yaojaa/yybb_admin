@@ -39,15 +39,19 @@ export default {
         return {
             status_filter: "",
             tagsListGroup: {
-                '管理端是否接收:': [
-                    { title: '是', key: 'business_on', value: 1 },
-                    { title: '否', key: 'business_on', value: 0 }
+                '平台类型:': [
+                    { title: '全部', key: 'business_on', value: 1 },
+                    { title: '企业端', key: 'business_on', value: 1 },
+                    { title: '店员端', key: 'business_on', value: 0 }
                 ],
 
-                'POS端是否接收:': [
-                    
-                    { title: '是', key: 'pos_on', value: 1 },
-                    { title: '否', key: 'pos_on', value: 0 }
+                '通知类型:': [
+                    { title: '全部', key: 'type', value: 0 },
+                    { title: '重要通知', key: 'type', value: 1 },
+                    { title: '新品', key: 'type', value: 2 },
+                    { title: '优惠活动通知', key: 'type', value: 3 },
+                    { title: '公告', key: 'type', value: 4 },
+                    { title: '动态', key: 'type', value: 5 }
                 ]
             },
             searchs: {

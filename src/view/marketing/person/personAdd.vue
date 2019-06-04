@@ -14,7 +14,7 @@
 
 
 
-            <div class="panel">
+            <div class="panel" id="person_add">
 
                 <div class="form-panel p-xl"  v-if="step==1">
                     <!--form start-->
@@ -36,7 +36,7 @@
                         :on-success="uploadActivityImg"
                         >
                         <img v-if="ruleForm.activity_img" :src="ruleForm.activity_img" class="avatar person-upload-img">
-                        <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:48px;margin-top:15%"></i>
+                        <i v-else class="el-icon-plus avatar-uploader-icon" style="font-size:48px"></i>
                       </el-upload>
                   <div class="upload-title">
                       <p class="upload-title-red">支持上传一张图片，图片宽高比为1242*1242，支持JPEG、PNG 等大部分图片格式</p>
@@ -331,10 +331,10 @@ export default {
             { required: true, message: '请输入活动名称', trigger: 'blur' },
           ],
           activity_subject: [
-            { required: true, message: '请输入活动描述', trigger: 'blur' },
+            { required: true, message: '请输入活动卖点', trigger: 'blur' },
           ],
           activity_desc: [
-            { required: true, message: '请输入活动卖点', trigger: 'blur' },
+            { required: true, message: '请输入活动规则', trigger: 'blur' },
           ]
 
         }
@@ -674,7 +674,7 @@ export default {
   .price{
     font-size: 16px;
     font-weight: bold;
-    color:#333;
+    color:#fff;
     margin-right:6px;
   }
   .margin-top10{
@@ -773,33 +773,33 @@ overflow : hidden;
 
 </style>
 <style >
-  .el-checkbox__input{
+#person_add  .el-checkbox__input{
   position: absolute ;
   right:6px ;
   top: 6px ;
   
 }
-.el-dialog__body{
+#person_add .el-dialog__body{
   background-color: #fff;
 }
-.el-tabs__nav-wrap::after{
+#person_add .el-tabs__nav-wrap::after{
   background-color: #f6f6f6
 }
-.el-tabs__item{
+#person_add .el-tabs__item{
   color:#666;
 }
-.goods-div-left p{
+#person_add .goods-div-left p{
   color:#333;
 }
-.goods-div-left p.money{
+#person_add .goods-div-left p.money{
   color:#E89925 100%
 }
-.goods-div{
+#person_add .goods-div{
   border-radius:6px;
   box-shadow: 0px 0px 18px 0px rgba(211, 211, 211, 0.5);
   display: inline-block;
   margin-left: 10px;
-  background-color:#fff;
+  background-color: #fff;
 
 }
 p{
@@ -816,9 +816,10 @@ p{
 .gift-table{
   font-size: 14px;
 }
-.form-panel{
-  
+#person_add .el-input--small,#person_add .el-textarea__inner{
+  max-width: 370px;
 }
+
 
 
 </style>
