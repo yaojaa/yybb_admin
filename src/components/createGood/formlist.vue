@@ -3,6 +3,17 @@
         <!-- 表单list -->
         <el-form ref="createdData" :model="createdData" :rules="rules" label-width="120px" class="form-width-small">
             <template v-if="currentActive === 0">
+                <el-form-item label="为企业选择：" prop="business_id" v-if="goodType === GOODTYPE['serviceList']">
+                    <el-select v-model="createdData.business_id" filterable placeholder="请选择">
+                        <el-option
+                            v-for="item in businessList"
+                            :key="item.business_id"
+                            :label="item.business_name"
+                            :value="item.business_id"
+                        >
+                        </el-option>
+                    </el-select>                                                   
+                </el-form-item>
                 <el-form-item label="名称：" prop="good_name">
                     <el-input  v-model="createdData.good_name" placeholder="名称为2-30个字" />                                                    
                 </el-form-item>
@@ -28,7 +39,9 @@
                     </div>
                     <p class="input__tabs">可设置多个标签</p>
                 </el-form-item> -->
-                <el-form-item label="快买栏目：" >
+
+                <!-- 2019.05.13  去掉快买栏目和快买分类 -->
+                <!-- <el-form-item label="快买栏目：" >
                     <el-select v-model="quickList" multiple placeholder="请选择" @change="quickChange" >
                         <el-option
                         v-for="item in quickBuyColumnList"
@@ -50,7 +63,7 @@
                         </el-option>
                     </el-select>
                     <span class="input__tabs">可设置多个标签</span>
-                </el-form-item>
+                </el-form-item> -->
 
                 <el-form-item label="详情页标签：" >
                     <el-select v-model="detailList" multiple placeholder="请选择" @change="detailChange" >
@@ -108,28 +121,30 @@
                         <el-radio-button label="无规格" /><el-radio-button label="添加规格" />
                     </el-radio-group> 
                 </el-form-item>
-                 <!-- 单规格 -->
+                <!-- 单规格 -->
+                <!-- 2019.05.13 总价商品和服务都有，去掉售价，添加到店再付（只有服务有），添加组合价总价，去掉成本 -->
                 <template  v-if="singleButton === '无规格' && createdData.good_sku && createdData.good_sku.length" >
                     <el-form ref="createdData_goodSku" :model="createdData.good_sku[0]" :rules="rules" label-width="120px">
                         <el-form-item :label="`${type}编码：`" prop="sku_code">
                             <el-input  v-model="createdData.good_sku[0].sku_code" placeholder="支持14以内的数字+英文组合"  />                                                                              
                         </el-form-item>
-                        <el-form-item label="售价：" prop="price_sale">
-                            <el-input  v-model="createdData.good_sku[0].price_sale" placeholder="请输入售价" />                                                                                                        
+                        <el-form-item label="总价" prop="price_total">
+                            <el-input  v-model="createdData.good_sku[0].price_total" placeholder="请输入总价" />                                                                                                        
+                            <span class="outText">元</span>
+                        </el-form-item>
+                        <el-form-item label="到店再付：" prop="price_pos" v-if="goodType === GOODTYPE['serviceList']">
+                            <el-input  v-model="createdData.good_sku[0].price_pos" placeholder="请输入到店再付" />                                                                                                        
                             <span class="outText">元</span>
                         </el-form-item>
                         <el-form-item label="原价：" prop="price">
                             <el-input  v-model="createdData.good_sku[0].price" placeholder="请输入原价" />                                                                                                        
                             <span class="outText">元</span>
                         </el-form-item>
-                        <el-form-item label="成本" prop="price_cost">
-                            <el-input  v-model="createdData.good_sku[0].price_cost" placeholder="请输入成本" />                                                                                                        
+                        <el-form-item label="组合价总价" prop="price_zz_total">
+                            <el-input  v-model="createdData.good_sku[0].price_zz_total" placeholder="请输入组合价总价" />                                                                                                        
                             <span class="outText">元</span>
                         </el-form-item>
-                        <el-form-item label="总价" prop="price_total"  v-if="goodType === GOODTYPE['serviceList']">
-                            <el-input  v-model="createdData.good_sku[0].price_total" placeholder="请输入总价" />                                                                                                        
-                            <span class="outText">元</span>
-                        </el-form-item>
+                        
                     </el-form>
                 </template>
                 <!-- 单规格 END -->
@@ -154,9 +169,10 @@
                             <el-table-column :label="createdData.sku_type_arr[0]" prop="sku_type_arr[0]" v-if="createdData.sku_type_arr[0]" /> 
                             <!-- 容量列 -->
                             <el-table-column :label="createdData.sku_type_arr[1]" prop="sku_type_arr[1]" v-if="createdData.sku_type_arr.length>1" />
-                            <el-table-column label="售价" >
+                            
+                            <el-table-column label="总价" v-if="goodType === GOODTYPE['serviceList']">
                                 <template slot-scope="scope">
-                                    <el-input  v-model="scope.row.price_sale" placeholder="10000" /> <span class="outText1">元</span>
+                                    <el-input  v-model="scope.row.price_total" placeholder="10000" /><span class="outText1"> 元</span>
                                 </template>
                             </el-table-column>
                             <el-table-column label="原价" >
@@ -164,16 +180,12 @@
                                     <el-input  v-model="scope.row.price" placeholder="10000" /><span class="outText1"> 元</span>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="成本" >
+                            <el-table-column label="组合价总价" >
                                 <template slot-scope="scope">
-                                    <el-input  v-model="scope.row.price_cost" placeholder="10000" /> <span class="outText1">元</span>
+                                    <el-input  v-model="scope.row.price_zz_total" placeholder="10000" /> <span class="outText1">元</span>
                                 </template>
                             </el-table-column>
-                            <el-table-column label="总价" v-if="goodType === GOODTYPE['serviceList']">
-                                <template slot-scope="scope">
-                                    <el-input  v-model="scope.row.price_total" placeholder="10000" /><span class="outText1"> 元</span>
-                                </template>
-                            </el-table-column>
+                            
                             <el-table-column label="编码" >
                                 <template slot-scope="scope">
                                     <el-input  v-model="scope.row.sku_code" placeholder="10000" /> 
@@ -202,7 +214,8 @@
                     </div>
                 </template>
 
-                <el-form-item :label="`${type}海报图：`" prop="poster_img" v-if="goodType !== GOODTYPE['fictitiousList']">
+                <!-- 2019.05.13  去掉海报图 -->
+                <!-- <el-form-item :label="`${type}海报图：`" prop="poster_img" v-if="goodType !== GOODTYPE['fictitiousList']">
                     <div class="upload-title">
                     <p>支持上传1张图片，图片宽高比为1020*1500，支持JPG、PNG等格式图片，单张图片大小不超过5M</p>
                     </div>
@@ -223,7 +236,7 @@
                             <p>添加图片</p><span>只能上传一张</span>
                         </i>
                     </el-upload>
-                </el-form-item>
+                </el-form-item> -->
                
                 <el-form-item :label="`${type}图片：`" prop="good_img_arr">
                     <div class="upload-title">
@@ -326,7 +339,8 @@
                         </i>
                     </el-upload>
                 </el-form-item>
-                <el-form-item :label="`${type}卖点图：`" prop="explain_img_arr">
+                <!-- 2019.05.13  去掉卖点图 -->
+                <!-- <el-form-item :label="`${type}卖点图：`" prop="explain_img_arr">
                     <div class="upload-title">
                         支持上传2-4张图片，图片宽高比为450*540，支持JPG、PNG等格式图片，单张图片大小不超过5M
                     </div>
@@ -348,7 +362,7 @@
                             <p>添加图片</p><span>还可以添加{{explain_img_arr.over}}张</span>
                         </i>
                     </el-upload>
-                </el-form-item>
+                </el-form-item> -->
             </template>
             <!-- 基础信息 -->
 
@@ -483,6 +497,7 @@ export default {
   data() {
     return {
         renderList:[],
+        businessList: [], // 所有企业，目前支持北京
         industryForm:{}, // 所属行业分类
         quickBuyColumnList:[],//快买栏目后台数据
         quickList:[], //快买栏目model
@@ -742,6 +757,7 @@ export default {
             trigger: "blur"
         }],
     }
+    this.getBusinessList();
     this.getCategoryList();
     this.getQuickBuyColumnList();
     this.renderLabel()
@@ -816,6 +832,22 @@ export default {
 
           //渲染分类
       },
+      getBusinessList() {
+        //获取企业列表
+        this.$axios
+            .get("/api/admin/select/businessList?city_code=110100")
+            .then(res => {
+            if (res.data.code == 0) {
+                const list = res.data.data;
+                list.forEach(item => {
+                    return { value: item.business_id, label: item.business_name };
+                });
+                this.businessList = list;
+                console.log(this.businessList, 'businessList');
+                //console.log(this.industryForm,'industryForm')
+            }
+            });
+        },
       getCategoryList(){
           //获取行业列表
         this.$axios.get("/api/admin/select/categoryList").then(res =>{

@@ -30,7 +30,7 @@
     </div>
 </template>
 <script>
-import { mapState } from 'Vuex'
+import { mapState } from 'vuex'
 import BreadCrumb from "@/components/common/BreadCrumb";
 
 export default {
