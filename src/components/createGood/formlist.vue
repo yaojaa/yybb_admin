@@ -3,6 +3,17 @@
         <!-- 表单list -->
         <el-form ref="createdData" :model="createdData" :rules="rules" label-width="120px" class="form-width-small">
             <template v-if="currentActive === 0">
+                <el-form-item label="为企业选择：" prop="business_id" v-if="goodType === GOODTYPE['serviceList']">
+                    <el-select v-model="createdData.business_id" filterable placeholder="请选择">
+                        <el-option
+                            v-for="item in businessList"
+                            :key="item.business_id"
+                            :label="item.business_name"
+                            :value="item.business_id"
+                        >
+                        </el-option>
+                    </el-select>                                                   
+                </el-form-item>
                 <el-form-item label="名称：" prop="good_name">
                     <el-input  v-model="createdData.good_name" placeholder="名称为2-30个字" />                                                    
                 </el-form-item>
@@ -486,6 +497,7 @@ export default {
   data() {
     return {
         renderList:[],
+        businessList: [], // 所有企业，目前支持北京
         industryForm:{}, // 所属行业分类
         quickBuyColumnList:[],//快买栏目后台数据
         quickList:[], //快买栏目model
@@ -745,6 +757,7 @@ export default {
             trigger: "blur"
         }],
     }
+    this.getBusinessList();
     this.getCategoryList();
     this.getQuickBuyColumnList();
     this.renderLabel()
@@ -819,6 +832,22 @@ export default {
 
           //渲染分类
       },
+      getBusinessList() {
+        //获取企业列表
+        this.$axios
+            .get("/api/admin/select/businessList?city_code=110100")
+            .then(res => {
+            if (res.data.code == 0) {
+                const list = res.data.data;
+                list.forEach(item => {
+                    return { value: item.business_id, label: item.business_name };
+                });
+                this.businessList = list;
+                console.log(this.businessList, 'businessList');
+                //console.log(this.industryForm,'industryForm')
+            }
+            });
+        },
       getCategoryList(){
           //获取行业列表
         this.$axios.get("/api/admin/select/categoryList").then(res =>{

@@ -75,7 +75,7 @@
 import BreadCrumb from "@/components/common/BreadCrumb";
     import {
         mapState
-    } from "Vuex";
+    } from "vuex";
     export default {
         name: "detail",
     
