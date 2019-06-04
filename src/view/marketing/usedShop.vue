@@ -91,7 +91,7 @@ export default {
                         "label": "门店类型",
                         "width": "",
                         formatter(row) {
-                            return "加盟商"
+                            return "企业"
                         }
                     },
                     {

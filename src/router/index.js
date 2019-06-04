@@ -198,6 +198,43 @@ export default new Router({
                     }
                 },
                 {
+                    // 投诉企业列表
+                    path: '/manage/complaintEnterpriseList/list',
+                    component: resolve => require(['../view/complaintEnterpriseList/list.vue'], resolve),
+                    meta: {
+                        title: '投诉企业',
+                        permission: true
+                    }
+                },
+                {
+                    // 投诉企业详情
+                    path: '/manage/complaintEnterpriseList/detail/:id',
+                    component: resolve => require(['../view/complaintEnterpriseList/detail.vue'], resolve),
+                    meta: {
+                        title: '投诉企业',
+                        permission: true
+                    }
+                },
+                {
+                    // 用户投诉列表
+                    path: '/manage/userComplaint/list',
+                    component: resolve => require(['../view/userComplaint/list.vue'], resolve),
+                    meta: {
+                        title: '用户投诉',
+                        permission: true
+                    }
+                },
+                {
+                    // 用户投诉详情
+                    path: '/manage/userComplaint/detail/:id',
+                    component: resolve => require(['../view/userComplaint/detail.vue'], resolve),
+                    meta: {
+                        title: '用户投诉',
+                        permission: true
+                    }
+                },
+                
+                {
                     // 案例添加
                     path: '/manage/case/add',
                     component: resolve => require(['../view/case/case_add.vue'], resolve),
@@ -297,36 +334,36 @@ export default new Router({
                     }
                 },
                 {
-                    // 加盟商
+                    // 企业
                     path: '/business/alliance',
                     component: resolve => require(['../view/business/alliance.vue'], resolve),
                     meta: {
-                        title: '加盟商'
+                        title: '企业'
                     }
                 },
 
                 {
-                    // 加盟商
+                    // 企业
                     path: '/business/alliance_add',
                     component: resolve => require(['../view/business/alliance_add.vue'], resolve),
                     meta: {
-                        title: '添加加盟商'
+                        title: '添加企业'
                     }
                 },
                 {
-                    // 加盟商
-                    path: '/business/alliance_add/:business_id',
+                    // 企业
+                    path: '/business/alliance_add/:id',
                     component: resolve => require(['../view/business/alliance_add.vue'], resolve),
                     meta: {
-                        title: '编辑加盟商'
+                        title: '编辑企业'
                     }
                 },
                 {
-                    // 加盟商
+                    // 企业
                     path: '/business/alliance_detail/:id',
                     component: resolve => require(['../view/business/alliance_detail.vue'], resolve),
                     meta: {
-                        title: '加盟商详情'
+                        title: '企业详情'
                     }
                 },
                 {
@@ -379,19 +416,19 @@ export default new Router({
                     }
                 },
                 {
-                    // 加盟商审核
+                    // 企业审核
                     path: '/audit/business',
                     component: resolve => require(['../view/audit_business/list.vue'], resolve),
                     meta: {
-                        title: '加盟商审核列表'
+                        title: '企业审核列表'
                     }
                 },
                 {
-                    // 加盟商审核
+                    // 企业审核
                     path: '/audit/business/detail/:id',
                     component: resolve => require(['../view/audit_business/detail.vue'], resolve),
                     meta: {
-                        title: '加盟商审核详情'
+                        title: '企业审核详情'
                     }
                 },
 
@@ -446,7 +483,7 @@ export default new Router({
                 },
 
                 {
-                    // 加盟商
+                    // 企业
                     path: '/shop/detail/:id',
                     component: resolve => require(['../view/shop/detail.vue'], resolve),
                     meta: {
@@ -461,6 +498,14 @@ export default new Router({
                     component: resolve => require(['../view/user/userList.vue'], resolve),
                     meta: {
                         title: '用户管理'
+                    }
+                },
+                {
+                    // 黑名单列表
+                    path: '/user/blackList',
+                    component: resolve => require(['../view/user/blackList.vue'], resolve),
+                    meta: {
+                        title: '黑名单管理'
                     }
                 },
                 {

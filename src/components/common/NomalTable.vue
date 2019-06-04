@@ -48,7 +48,7 @@
                         :header-align="column.headerAlign">
                         <template slot-scope="scope">
                             <p v-if="column.type == 'text'" v-html="formatter(scope.row,column,columnIndex,scope.$index)"></p>
-                            <!-- <p v-if="column.type == 'text'" v-html="formatter(scope.row[column.prop])"></p> -->
+                            <p v-if="column.type == 'operation'" v-html="formatter(scope.row,column,columnIndex,scope.$index)"></p>
 
                             <el-popover
                                 v-if="column.type == 'hover'"
@@ -60,6 +60,8 @@
                                 :content="scope.row[column.prop]">
                                 <el-button type="text" size="small" slot="reference" v-html="column.hover.label"></el-button>
                             </el-popover>
+
+                            
 
                             <el-button 
                                 v-if="column.type == 'handle'" 

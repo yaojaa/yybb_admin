@@ -4,10 +4,7 @@
             <div class="crumbs">
                  <bread-crumb :bread-crumb="breadcrumb"></bread-crumb>
             </div>
-            <div class="page-header-actions">
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="$router.push({ path: '/audit/shop' })">门店审核</el-button>
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="$router.push({ path: '/shop/add' })">添加门店</el-button>
-            </div>
+            
             
         </div>
         <div class="page-content">
@@ -23,19 +20,7 @@
             <nomal-table v-on:listenSwitchChange="listenSwitchChange" ref="table" :table-json="tableJson" :url="url">
                 <table-search :searchs="searchs"></table-search>
             </nomal-table>
-            <el-dialog :title="is_use==0?'停用':'启用'" :visible.sync="dialog" width="30%">
-                <p style="color:red">此操作会{{is_use==0?'停用':'启用'}}门店</p>
-                <p>操作人:{{user.data.user_realname}}</p>
-                <p>操作备注:</p>
-                <p>
-                    <el-input type="textarea" autosize placeholder="请输入操作备注" v-model="remark">
-                    </el-input>
-                </p>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialog = false">取 消</el-button>
-                    <el-button type="primary" @click="doUpdateIsUse">确 定</el-button>
-                </span>
-            </el-dialog>
+            
         </div>
     </div>
 </template>
@@ -50,11 +35,11 @@ export default {
             breadcrumb: [
                 //面包屑
                 {
-                    name: "企业管理"
+                    name: "网站管理"
                 },
                 {
-                    name: "门店列表",
-                    url: "/shop/list"
+                    name: "投诉企业",
+                    url: "/complaintEnterpriseList/list"
                 }
             ],
             user: JSON.parse(localStorage.user),
@@ -67,25 +52,25 @@ export default {
             tagsListGroup: {
 
                 '选择状态:': [
-                    { title: '全部', key: 'shop_is_use', value: '' },
-                    { title: '停用', key: 'shop_is_use', value: 0 },
-                    { title: '启用', key: 'shop_is_use', value: 1 }
+                    { title: '全部', key: 'handle_status', value: '' },
+                    { title: '待处理', key: 'handle_status', value: 1 },
+                    { title: '已处理', key: 'handle_status', value: 2 }
                 ]
             },
             searchs: {
                 "list": [
                     {
                         "type": "input-text", //输入文本
-                        "label": "门店名称",
-                        "name": "shop_name",
+                        "label": "投诉人",
+                        "name": "shop_account_name",
                         "value": "",
-                        "placeholder": "门店名称",
+                        "placeholder": "投诉人姓名",
                     },
                     
                     {
                         "type": "input-text", //选择器
-                        "label": "城市",
-                        "name": "city_name",
+                        "label": "被投诉企业名称",
+                        "name": "business_name",
                         "value": ""
                     },
                     {
@@ -102,100 +87,85 @@ export default {
                     },
                 ]
             },
-            url: "/api/admin/shop/index",
+            url: "/api/admin/dispute/index",
 
             tableJson: {
                 "column": [ //行
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "创建时间",
-                        "prop": "create_time",
+                        "label": "投诉人",
+                        "prop": "shop_account_name",
                         "width": ""
                     },
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "门店名称",
-                        "prop": "shop_name",
+                        "label": "投诉时间",
+                        "prop": "create_time",
                         "width": "",
 
                     },
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "归属企业",
+                        "label": "被投诉企业",
                         "prop": "business_name",
                         "width": "",
 
                     },
-                    {
-                        "type": "text",
-                        "align": "center",
-                        "label": "店长姓名/手机号",
-                        "prop": "shop_account_leader_name",
-                        "width": "200",
-                        formatter(row) {
-                            return `<p style='text-align: center'>
-                                ${row.shop_account_leader_name}<br/>
-                                ${row.shop_account_leader_phone}
-                                                    </p>`;
-                        }
-
-                    },
+                   
                     
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "门店地址",
-                        "prop": "shop_address",
+                        "label": "涉及金额",
+                        "prop": "money",
                         "width": "200",
-
-                    },
-                    
-                    {
-                        "type": "text",
-                        "align": "center",
-                        "label": "状态",
-                        "width": "",
                         formatter(row) {
-                            return `<div style="color:red">
-                                ${row.shop_is_use==0?'停用':'启用'}
-                                </div>`
+                            return row.money/100
                         }
 
                     },
                     {
-                        "type": "switch_btn",
-                        "label": "操作",
+                        "type": "text",
                         "align": "center",
-                        "width": "50",
-                        "prop": "shop_is_use",
-                        "value": ['停用', '启用']
+                        "label": "投诉状态",
+                        "prop": "money",
+                        "width": "200",
+                        formatter(row) {
+                            return ['','企业未处理','企业已处理','店员确认解决'][row.handle_status]
+                        }
+
                     },
+                    {
+                        "type": "text",
+                        "align": "center",
+                        "label": "处理结果",
+                        "prop": "money",
+                        "width": "200",
+                        formatter(row) {
+                            return row.handle_list[row.handle_list.length-1].business_reason
+                        }
+
+                    },
+                    
+                    
+                    
                     
 
                     {
                         "type": "handle",
-                        "label": "查看",
+                        "label": "操作",
                         "align": "center",
                         "width": "150",
                         "list": [
+                            
                             {
-                                "label": "修改",
-                                "type": "edit",
-                                onClick(tablePage, self, row) {
-                                    console.log(row,'row')
-                                    self.$router.push("/shop/add/" + row.shop_id)
-                                }
-
-
-                            },
-                            {
-                            "label": "详情",
+                            "label": "查看详情",
                             "type": "detail",
                             onClick(tablePage, self, row) {
-                                self.$router.push("/shop/detail/" + row.shop_id)
+                                self.$router.push("/manage/complaintEnterpriseList/detail/" + row.dispute_id)
                             }
 
                         }]
@@ -236,47 +206,47 @@ export default {
 
 
 
-            const { shop_id, shop_is_use } = data.value
-            console.log(data.value,'data.value')
+            // const { shop_id, shop_is_use } = data.value
+            // console.log(data.value,'data.value')
 
-            this.shop_id = shop_id
-            this.is_use = shop_is_use == 1 ? 0 : 1
-            console.log(this.is_use)
+            // this.shop_id = shop_id
+            // this.is_use = shop_is_use == 1 ? 0 : 1
+            // console.log(this.is_use)
 
-            this.dialog = true
+            // this.dialog = true
         },
-        doUpdateIsUse() {
-            const params = {
-                id: this.shop_id,
-                is_use: this.is_use,
-                remark: this.remark
-            }
+        // doUpdateIsUse() {
+        //     const params = {
+        //         id: this.shop_id,
+        //         is_use: this.is_use,
+        //         remark: this.remark
+        //     }
 
-            this.$axios.post("/api/admin/shop/isUse", params).then(res => {
-                this.dialog = false;
-                console.log(res)
+        //     this.$axios.post("/api/admin/shop/isUse", params).then(res => {
+        //         this.dialog = false;
+        //         console.log(res)
 
-                if (res.data.code == 0) {
+        //         if (res.data.code == 0) {
 
-                    this.$alert( res.data.data)
+        //             this.$alert( res.data.data)
 
-                    this.$refs.table.getData({
-                        is_page: 1,
-                        page: 1
-                    });
-                } else {
-                    this.$alert(res.data.msg)
+        //             this.$refs.table.getData({
+        //                 is_page: 1,
+        //                 page: 1
+        //             });
+        //         } else {
+        //             this.$alert(res.data.msg)
 
-                }
+        //         }
 
 
-            }).catch((e) => {
+        //     }).catch((e) => {
 
-                this.$alert('操作失败' + e)
+        //         this.$alert('操作失败' + e)
 
-            })
+        //     })
 
-        },
+        // },
         openModal() {
 
             console.log('openModal')

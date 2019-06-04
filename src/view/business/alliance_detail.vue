@@ -2,7 +2,7 @@
     <div class="page">
         <div class="page-header">
             <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item>加盟商</el-breadcrumb-item>
+                <el-breadcrumb-item>企业</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ path: $route.path }">{{$route.meta.title}}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -12,7 +12,7 @@
                 <el-tab-pane label="拥有门店" name="shop"></el-tab-pane>
             </el-tabs>
 
-            <div class="page-column"  v-if="tab=='shop'">
+            <div class="page-column" id="shop_tab_ld"  v-if="tab=='shop'">
                 <div class="p-xl">  
                   <el-table
                   :data="shopList"
@@ -29,18 +29,18 @@
                   </el-table-column>
 
                       <el-table-column
-                    prop="shop_service_phone"
-                    label="类型">
+                    prop="shop_address"
+                    label="门店地址">
                   </el-table-column>
 
 
                   <el-table-column
-                    prop="shop_service_phone"
+                    prop="shop_account_leader_name"
                     label="店长">
                   </el-table-column>
 
                      <el-table-column
-                    prop="shop_service_phone"
+                    prop="shop_account_leader_phone"
                     label="手机号">
                   </el-table-column>
 
@@ -55,7 +55,7 @@
 
                      <div class="panel-status text-justify">
                 <div><span>状态：</span><span class="f18 bold">
-                    {{['删除','正常'][info.business_status]}}
+                    {{['未认证','认证中','已认证','认证失败','','平台企业'][info.business_auth_status]}}
                 </span></div>
              <!--    <div>
                     <el-button size="mini" plain @click="">拒绝退款</el-button>
@@ -71,7 +71,7 @@
                             <div class="item-list f14 four-text">
                                 
                                 <div class="item">
-                                    <div class="hd">加盟商logo：</div>
+                                    <div class="hd">企业logo：</div>
                                     <div class="bd" v-if="info.business_logo">
                                         <img :src="info.business_logo" width="200">
                                     </div>
@@ -228,7 +228,7 @@ export default {
 
         console.log(this.$route.params)
 
-        this.id = this.$route.params.id
+        this.business_id = this.$route.params.id
 
         this.getData(this.$route.params)
 
@@ -245,7 +245,7 @@ export default {
 
             this.$axios({
                 method: 'get',
-                url: '/api/admin/business/getOneById',
+                url: '/api/admin/business/detail',
                 params: params
             }).then((res) => {
 
@@ -265,10 +265,10 @@ export default {
 
             this.$axios({
                 method: 'get',
-                url: '/api/admin/business/getBusinessShop',
+                url: '/api/admin/shop/index',
                 params: {
-                    id:this.id,
-                    page_size:100
+                    business_id:this.id,
+                    page_size:10
                 }
             }).then((res) => {
 
@@ -292,5 +292,8 @@ export default {
 <style scoped>
   .item-list.four-text .hd{
     width: 6em
+  }
+  #shop_tab_ld .el-table__header{
+      width: 980px;
   }
 </style>
