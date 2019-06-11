@@ -12,20 +12,23 @@
                 <div class="form-panel p-xl  width480">
                     <!--form start-->
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm1" label-width="140px" class="demo-ruleForm" >
-                        <el-form-item label="搜索名：" prop="search_words">
-                            <el-input v-model="ruleForm.search_words"></el-input>
-                        </el-form-item>
-                        <el-form-item label="搜索类型：" prop="search_type">
-							<el-select v-model="ruleForm.search_type" placeholder="请选择搜索类型">
-								<el-option v-for="item in typeList" :key="item.type" :label="item.value" :value="item.type" ></el-option>
+                        
+                        <el-form-item label="选择模版组：" prop="reply_group_id">
+							<el-select v-model="ruleForm.reply_group_id" placeholder="请选择模版组">
+								<el-option v-for="item in groupList" :key="item._id" :label="item.group_name" :value="item.reply_group_id" ></el-option>
 							</el-select>
                         </el-form-item>
-						<el-form-item label="跳转地址：" prop="search_url">
-                            <el-input v-model="ruleForm.search_url"></el-input>
+						<el-form-item label="模版标题：" prop="title">
+                            <el-input v-model="ruleForm.title"></el-input>
                         </el-form-item>
-						<el-form-item label="颜色值：" prop="search_colour">
-                            <el-input v-model="ruleForm.search_colour"></el-input>
+                        <el-form-item label="模版内容：" >
+                            <el-input type="textarea" v-model="ruleForm.content" rows="7"></el-input>
                         </el-form-item>
+						<el-form-item label="备注：" prop="search_colour">
+                            <el-input v-model="ruleForm.remark"></el-input>
+                            <!-- <el-input type="textarea" v-model="ruleForm.remark" rows="7"></el-input> -->
+                        </el-form-item>
+                        
 						<el-form-item>
 							<el-button type="primary" @click="submit()">提交</el-button>
 							
@@ -60,73 +63,58 @@ export default {
                   
                 },
                 {
-                    name: "搜索", //名字
-                    url: '/manage/search/list'
+                    name: "模版管理", //名字
+                    url: '/manage/template/list'
                 },
                 
                 {
                     name: "添加" //名字
                 }
 			],
-			typeList:[
-				{
-					type:1,
-					value:"服务"
-				},
-				{
-					type:2,
-					value:"商品"
-				},
-				{
-					type:3,
-					value:"专题"
-				},
-				{
-					type:4,
-					value:"案例"
-				},
-				{
-					type:5,
-					value:"标签"
-				},
-				{
-					type:6,
-					value:"活动推广页"
-				},
-				{
-					type:7,
-					value:"搜索商品/服务"
-				}
-			],
+			groupList:[],
       
       ruleForm:{
-        search_words:"",
-        search_type:"",
-        search_url:"",
-        search_colour:""
+        reply_group_id:"",
+        title:"",
+        content:"",
+        remark:""
 
         
       },
       rules: {
-          search_words: [
-				{ required: true, message: '请输入搜索关键词', trigger: 'blur' }
+          title: [
+				{ required: true, message: '请输入模版标题', trigger: 'blur' }
           ],
-          search_type: [
-            	{ required: true, message: '请选择搜索类型', trigger: 'change' }
-		  ],
-		  search_url:[
-			   { required: true, message: '请输入跳转地址', trigger: 'blur' }
-		  ],
-		  search_colour:[
-			   { required: true, message: '请输入跳转地址', trigger: 'blur' }
+          reply_group_id: [
+            	{ required: true, message: '请选择模版组', trigger: 'change' }
 		  ]
+		
 		  
         }
 
     };
   },
   methods:{
-      
+    getGroupList(){
+        this.$axios.get("/api/admin/replymodel/groupList").then(res => {
+
+			if(res.data.code == 0){
+
+				
+				this.groupList = res.data.data
+				console.log(this.groupList,'groupList')
+
+			}else{
+				this.$alert(res.data.msg)
+			}
+
+
+		}).catch((e)=>{
+
+		this.$alert('操作失败'+e)
+
+		})
+    },
 
          
     submit(){
@@ -136,12 +124,12 @@ export default {
     if (Object.keys(params).length) {
 		
     	this.ruleForm.id = params.id
-			this.$axios.post("/api/admin/search/modify", this.ruleForm).then(res => {
+			this.$axios.post("/api/admin/replymodel/modify", this.ruleForm).then(res => {
 
 				if(res.data.code == 0){
 
 					this.$alert('操作成功')
-					this.$router.push('/manage/search/list')
+					this.$router.push('/manage/template/list')
 					
 
 				}else{
@@ -156,12 +144,12 @@ export default {
 			})
     }else{
         
-        this.$axios.post("/api/admin/search/create", this.ruleForm).then(res => {
+        this.$axios.post("/api/admin/replymodel/create", this.ruleForm).then(res => {
 
 			if(res.data.code == 0){
 
 				this.$alert('操作成功')
-				this.$router.push('/manage/search/list')
+				this.$router.push('/manage/template/list')
 				
 
 			}else{
@@ -201,7 +189,7 @@ export default {
     //如果是编辑
     if (Object.keys(params).length) {
         
-        this.$axios.post("/api/admin/search/detail",params).then(res => {
+        this.$axios.post("/api/admin/replymodel/detail",params).then(res => {
           console.log(res.data.data,'data----data')
           //this.ruleForm.activity_status = res.data.data.activity_status
             this.ruleForm = res.data.data;
@@ -209,6 +197,7 @@ export default {
         })
         
     }
+    this.getGroupList()
      
   },
   computed: {

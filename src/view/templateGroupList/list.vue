@@ -5,7 +5,8 @@
                  <bread-crumb :bread-crumb="breadcrumb"></bread-crumb>
             </div>
             <div class="page-header-actions">
-                <el-button icon="el-icon-plus" size="mini" type="primary" @click="$router.push({ path: '/manage/search/add' })">添加</el-button>
+                
+                <el-button icon="el-icon-plus" size="mini" type="primary" @click="$router.push({ path: '/manage/templateGroupList/add' })">添加模版组</el-button>
             </div>
         </div>
         <div class="page-content">
@@ -39,8 +40,8 @@ export default {
                     name: "网站管理"
                 },
                 {
-                    name: "搜索",
-                    url: "/search/list"
+                    name: "模版组管理",
+                    url: "/manage/templateGroupList/list"
                 }
             ],
             user: JSON.parse(localStorage.user),
@@ -62,11 +63,13 @@ export default {
                 "list": [
                     {
                         "type": "input-text", //输入文本
-                        "label": "搜索名",
-                        "name": "search_words",
+                        "label": "模版组名称",
+                        "name": "group_name",
                         "value": "",
                         "placeholder": "请输入",
                     },
+                    
+                   
                     
                     {
                         "type": "input-singal-date", //输入日期
@@ -82,7 +85,7 @@ export default {
                     },
                 ]
             },
-            url: "/api/admin/search/index",
+            url: "/api/admin/replymodel/groupList",
 
             tableJson: {
                 "column": [ //行
@@ -90,35 +93,56 @@ export default {
                     {
                         "type": "text",
                         "align": "center",
+                        "label": "模版组名称",
+                        "prop": "group_name",
+                        "width": "",
+
+                    },
+                    
+                    {
+                        "type": "text",
+                        "align": "center",
                         "label": "创建时间",
-                        "prop": "search_ctime",
-                        "width": "",
-
-                    },
-                    {
-                        "type": "text",
-                        "align": "center",
-                        "label": "搜索名",
-                        "prop": "search_words",
-                        "width": "",
-
-                    },
-                    {
-                        "type": "text",
-                        "align": "center",
-                        "label": "创建人",
-                        "prop": "search_create_name",
+                        "prop": "create_time",
                         "width": "200"
 
                     },
                     {
                         "type": "text",
                         "align": "center",
-                        "label": "链接",
-                        "prop": "search_url",
+                        "label": "模版组备注",
+                        "prop": "remark",
                         "width": "200"
 
                     },
+                    {
+                        "type": "text",
+                        "align": "center",
+                        "label": "模版组类型",
+                        "prop": "group_type",
+                        "width": "200",
+                        formatter(row) {
+                            
+                            switch (row.group_type) {
+                                case 1:
+                                    return `<p>评价</p>`
+                                    break;
+                                case 2:
+                                    return `<p>档案</p>`
+                                    break;
+                                case 3:
+                                    return `<p>案例</p>`
+                                    break;
+                                case 4:
+                                    return `<p>服务购买须知</p>`
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+
+                    },
+                    
                     {
                         "type": "handle",
                         "label": "查看",
@@ -130,7 +154,7 @@ export default {
                                 "type": "edit",
                                 onClick(tablePage, self, row) {
                                     console.log(row,'row')
-                                    self.$router.push("/manage/search/add/" + row.search_id)
+                                    self.$router.push("/manage/templateGroupList/add/" + row.reply_group_id)
                                 }
                             },
                             {
@@ -138,7 +162,7 @@ export default {
                             "type": "remove",
                             onClick(tablePage, self, row) {
                                 console.log(row,'row')
-                                self.removeNews(row.search_id)
+                                self.removeNews(row.reply_group_id)
                             }
 
                         }]
@@ -190,7 +214,7 @@ export default {
         },
         removeNews(id){
                  
-            this.$axios.post("/api/admin/search/remove", {"id":id}).then(res => {
+            this.$axios.post("/api/admin/replymodel/removeGroup", {"id":id}).then(res => {
 
                 if (res.data.code == 0) {
 

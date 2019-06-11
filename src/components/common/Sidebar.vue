@@ -64,18 +64,18 @@
                         subs: [
                             {
                                 index: '/order/list_goods',
-                                title: '商品订单'
+                                title: '商品管理'
                             },
                             {
                                 // index: '/order/list_service',
                                 // title: '服务订单'
                                 index: '/order/serviceOrderList',
-                                title: '服务订单'
+                                title: '服务管理'
                             },
-                            {
-                                index: '/order/purchaseOrderList',
-                                title: '采购品项'
-                            },
+                            // {
+                            //     index: '/order/purchaseOrderList',
+                            //     title: '采购品项'
+                            // },
                             {
                                 index: '/order/commentList',
                                 title: '评价管理'
@@ -102,6 +102,10 @@
                             {
                                 index: '/manage/search/list',
                                 title: '搜索'
+                            },
+                            {
+                                index: '/manage/template/list',
+                                title: '模版管理'
                             },
                             {
                                 index: '/admin/news/list',
@@ -134,7 +138,7 @@
                             },
                             {
                                 index: '/training/list',
-                                title: '培训'
+                                title: '干货培训'
                             }
                         ]
                     },

@@ -260,6 +260,60 @@ export default new Router({
                         permission: true
                     }
                 },
+                {
+                    // 模版
+                    path: '/manage/template/list',
+                    component: resolve => require(['../view/template/list.vue'], resolve),
+                    meta: {
+                        title: '模版',
+                        permission: true
+                    }
+                },
+                {
+                    // 添加模版
+                    path: '/manage/template/add',
+                    component: resolve => require(['../view/template/add.vue'], resolve),
+                    meta: {
+                        title: '添加模版',
+                        permission: true
+                    }
+                },
+                {
+                    // 编辑模版
+                    path: '/manage/template/add/:id',
+                    component: resolve => require(['../view/template/add.vue'], resolve),
+                    meta: {
+                        title: '编辑模版',
+                        permission: true
+                    }
+                },
+                {
+                    // 模版组管理
+                    path: '/manage/templateGroupList/list',
+                    component: resolve => require(['../view/templateGroupList/list.vue'], resolve),
+                    meta: {
+                        title: '模版组管理',
+                        permission: true
+                    }
+                },
+                {
+                    // 模版组管理
+                    path: '/manage/templateGroupList/add',
+                    component: resolve => require(['../view/templateGroupList/add.vue'], resolve),
+                    meta: {
+                        title: '添加模版组',
+                        permission: true
+                    }
+                },
+                {
+                    // 模版组管理
+                    path: '/manage/templateGroupList/add/:id',
+                    component: resolve => require(['../view/templateGroupList/add.vue'], resolve),
+                    meta: {
+                        title: '添加模版组',
+                        permission: true
+                    }
+                },
                 
                 {
                     // 案例添加
